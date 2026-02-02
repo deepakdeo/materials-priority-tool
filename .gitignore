@@ -1,0 +1,60 @@
+# Development provenance (local only)
+build_journal.md
+CLAUDE.md
+project_instructions.md
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Raw data files (large downloads)
+data/raw/usgs/*.xlsx
+data/raw/usgs/*.xls
+data/raw/worldbank/*.xlsx
+data/raw/worldbank/*.xls
+data/raw/doe/*.pdf
+
+# Keep CSV files in raw (they're smaller)
+!data/raw/**/*.csv
+
+# Streamlit
+.streamlit/secrets.toml

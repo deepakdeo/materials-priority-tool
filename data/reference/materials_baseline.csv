@@ -1,0 +1,7 @@
+material,import_reliance_pct,top_producer,top_producer_share_pct,us_production_exists,price_2024_usd,price_unit,5yr_price_change_pct,demand_growth_pct,market_size_bn,technology_readiness,capex_intensity
+Lithium,25,Australia,47,TRUE,15000,metric ton,180,20,8.5,7,8
+Cobalt,76,DRC,74,FALSE,33000,metric ton,-15,8,15.2,6,7
+Nickel,56,Indonesia,49,TRUE,18000,metric ton,-25,6,35.0,8,6
+Graphite,100,China,77,FALSE,1200,metric ton,10,15,4.5,5,5
+Rare Earths,95,China,70,TRUE,85,kg oxide,45,12,5.8,6,9
+Manganese,100,South Africa,37,FALSE,1800,metric ton,5,5,22.0,7,4

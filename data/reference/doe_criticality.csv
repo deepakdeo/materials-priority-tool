@@ -1,0 +1,7 @@
+material,importance_short,risk_short,importance_medium,risk_medium,criticality_category,primary_use
+Lithium,4,3,4,3,Near-Critical,Battery
+Cobalt,4,4,4,4,Critical,Battery
+Nickel,3,3,4,4,Near-Critical,Battery
+Graphite,4,4,4,4,Critical,Battery
+Rare Earths,4,4,4,4,Critical,Magnet
+Manganese,3,2,3,2,Lower-Risk,Battery
