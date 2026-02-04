@@ -2,101 +2,45 @@
 
 import streamlit as st
 import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
 from pathlib import Path
 
 st.set_page_config(page_title="Priority Rankings", page_icon="📊", layout="wide")
 
 st.title("📊 Priority Rankings")
-st.markdown("Composite scores and rankings for all critical materials.")
+st.markdown("Composite scores and rankings for critical materials based on 5-factor analysis.")
 
-# Load reference data
-DATA_DIR = Path(__file__).parent.parent / "data" / "reference"
+# Data paths
+DATA_DIR = Path(__file__).parent.parent / "data"
+PROCESSED_DIR = DATA_DIR / "processed"
 
 
 @st.cache_data
-def load_baseline_data():
-    """Load baseline materials data."""
-    filepath = DATA_DIR / "materials_baseline.csv"
+def load_materials_data():
+    """Load processed materials data with scores."""
+    filepath = PROCESSED_DIR / "materials_master.csv"
     if filepath.exists():
         return pd.read_csv(filepath)
     return None
 
 
-@st.cache_data
-def load_doe_data():
-    """Load DOE criticality data."""
-    filepath = DATA_DIR / "doe_criticality.csv"
-    if filepath.exists():
-        return pd.read_csv(filepath)
-    return None
-
-
-@st.cache_data
-def load_kc_data():
-    """Load KC logistics data."""
-    filepath = DATA_DIR / "kc_logistics.csv"
-    if filepath.exists():
-        return pd.read_csv(filepath)
-    return None
-
+# Color scheme for materials
+MATERIAL_COLORS = {
+    "Lithium": "#1f77b4",
+    "Cobalt": "#ff7f0e",
+    "Nickel": "#2ca02c",
+    "Graphite": "#d62728",
+    "Rare Earths": "#9467bd",
+    "Manganese": "#8c564b",
+}
 
 # Load data
-baseline_df = load_baseline_data()
-doe_df = load_doe_data()
-kc_df = load_kc_data()
+df = load_materials_data()
 
-if baseline_df is not None and doe_df is not None and kc_df is not None:
-    # Merge data
-    merged = baseline_df.merge(doe_df, on="material").merge(
-        kc_df[["material", "bulk_transport_benefit", "central_location_benefit", "existing_infrastructure"]],
-        on="material"
-    )
-
-    # Calculate scores (simplified for Phase 1)
-    merged["supply_risk_score"] = (
-        merged["import_reliance_pct"] / 100 * 5 +
-        merged["top_producer_share_pct"] / 100 * 3 +
-        2  # base score
-    ).clip(1, 10)
-
-    merged["market_opportunity_score"] = (
-        merged["5yr_price_change_pct"].clip(0, 100) / 25 +
-        merged["demand_growth_pct"].clip(0, 20) / 5 +
-        2  # base score
-    ).clip(1, 10)
-
-    merged["kc_advantage_score"] = (
-        merged["bulk_transport_benefit"] * 0.4 +
-        merged["central_location_benefit"] * 0.35 +
-        merged["existing_infrastructure"] * 0.25
-    ).clip(1, 10)
-
-    merged["production_feasibility_score"] = (
-        merged["us_production_exists"].astype(int) * 2 +
-        merged["technology_readiness"] / 2 +
-        (11 - merged["capex_intensity"]) / 3.33
-    ).clip(1, 10)
-
-    merged["strategic_alignment_score"] = (
-        (merged["importance_short"] + merged["risk_short"]) / 2 +
-        3  # battery relevance base
-    ).clip(1, 10)
-
-    # Calculate composite score with default weights
-    weights = {
-        "supply_risk_score": 0.25,
-        "market_opportunity_score": 0.20,
-        "kc_advantage_score": 0.15,
-        "production_feasibility_score": 0.20,
-        "strategic_alignment_score": 0.20,
-    }
-
-    merged["composite_score"] = sum(
-        merged[col] * weight for col, weight in weights.items()
-    ).round(2)
-
-    merged["rank"] = merged["composite_score"].rank(ascending=False, method="min").astype(int)
-    merged = merged.sort_values("rank")
+if df is not None:
+    # Sort by rank
+    df = df.sort_values('rank')
 
     # Display rankings table
     st.subheader("Material Rankings")
@@ -109,39 +53,149 @@ if baseline_df is not None and doe_df is not None and kc_df is not None:
     ]
 
     st.dataframe(
-        merged[display_cols].style.format({
+        df[display_cols].style.format({
             "composite_score": "{:.2f}",
             "supply_risk_score": "{:.1f}",
             "market_opportunity_score": "{:.1f}",
             "kc_advantage_score": "{:.1f}",
             "production_feasibility_score": "{:.1f}",
             "strategic_alignment_score": "{:.1f}",
-        }),
+        }).background_gradient(subset=['composite_score'], cmap='RdYlGn'),
         use_container_width=True,
         hide_index=True,
     )
+
+    st.markdown("---")
+
+    # Two column layout for charts
+    col1, col2 = st.columns(2)
+
+    with col1:
+        # Composite Score Bar Chart
+        st.subheader("Composite Score Comparison")
+
+        df_sorted = df.sort_values('composite_score', ascending=True)
+        colors = [MATERIAL_COLORS.get(m, "#636EFA") for m in df_sorted['material']]
+
+        fig_bar = go.Figure(go.Bar(
+            x=df_sorted['composite_score'],
+            y=df_sorted['material'],
+            orientation='h',
+            marker_color=colors,
+            text=df_sorted['composite_score'].round(2),
+            textposition='outside',
+        ))
+
+        fig_bar.update_layout(
+            xaxis_title="Composite Score",
+            yaxis_title="",
+            xaxis=dict(range=[0, 10]),
+            height=400,
+            margin=dict(l=100, r=50, t=20, b=50),
+        )
+
+        st.plotly_chart(fig_bar, use_container_width=True)
+
+    with col2:
+        # Radar Chart for Top 3
+        st.subheader("Top 3 Materials Comparison")
+
+        categories = [
+            'Supply Risk', 'Market Opportunity', 'KC Advantage',
+            'Production Feasibility', 'Strategic Alignment'
+        ]
+        score_cols = [
+            'supply_risk_score', 'market_opportunity_score', 'kc_advantage_score',
+            'production_feasibility_score', 'strategic_alignment_score'
+        ]
+
+        fig_radar = go.Figure()
+
+        for _, row in df.head(3).iterrows():
+            values = [row[col] for col in score_cols]
+            values.append(values[0])  # Close the polygon
+
+            fig_radar.add_trace(go.Scatterpolar(
+                r=values,
+                theta=categories + [categories[0]],
+                name=row['material'],
+                line_color=MATERIAL_COLORS.get(row['material'], "#636EFA"),
+                fill='toself',
+                opacity=0.6,
+            ))
+
+        fig_radar.update_layout(
+            polar=dict(radialaxis=dict(visible=True, range=[0, 10])),
+            showlegend=True,
+            height=400,
+            margin=dict(l=50, r=50, t=20, b=50),
+        )
+
+        st.plotly_chart(fig_radar, use_container_width=True)
+
+    st.markdown("---")
 
     # Summary cards
     st.subheader("Top 3 Priority Materials")
 
     cols = st.columns(3)
-    for i, (_, row) in enumerate(merged.head(3).iterrows()):
+    for i, (_, row) in enumerate(df.head(3).iterrows()):
         with cols[i]:
             st.metric(
-                label=f"#{row['rank']} {row['material']}",
+                label=f"#{int(row['rank'])} {row['material']}",
                 value=f"{row['composite_score']:.2f}",
                 delta=row["criticality_category"],
             )
             st.caption(f"Top producer: {row['top_producer']} ({row['top_producer_share_pct']}%)")
+            st.caption(f"Import reliance: {row['import_reliance_pct']}%")
 
     st.markdown("---")
-    st.info("📌 Full visualizations (bar chart, radar chart) will be added in Phase 3.")
+
+    # Criticality Matrix
+    st.subheader("Criticality Matrix")
+    st.caption("Materials positioned by Supply Risk vs Strategic Alignment")
+
+    fig_matrix = px.scatter(
+        df,
+        x='supply_risk_score',
+        y='strategic_alignment_score',
+        text='material',
+        color='material',
+        color_discrete_map=MATERIAL_COLORS,
+        size='composite_score',
+        size_max=30,
+    )
+
+    fig_matrix.update_traces(textposition='top center')
+
+    fig_matrix.update_layout(
+        xaxis_title="Supply Risk Score",
+        yaxis_title="Strategic Alignment Score",
+        xaxis=dict(range=[0, 10]),
+        yaxis=dict(range=[0, 10]),
+        height=500,
+        showlegend=False,
+    )
+
+    # Add quadrant lines and labels
+    fig_matrix.add_hline(y=5, line_dash="dash", line_color="gray", opacity=0.5)
+    fig_matrix.add_vline(x=5, line_dash="dash", line_color="gray", opacity=0.5)
+
+    fig_matrix.add_annotation(x=7.5, y=9, text="Critical Priority", showarrow=False,
+                               font=dict(size=11, color="darkred"))
+    fig_matrix.add_annotation(x=2.5, y=9, text="Strategic Focus", showarrow=False,
+                               font=dict(size=11, color="darkorange"))
+    fig_matrix.add_annotation(x=7.5, y=1.5, text="Supply Vulnerable", showarrow=False,
+                               font=dict(size=11, color="darkorange"))
+    fig_matrix.add_annotation(x=2.5, y=1.5, text="Lower Priority", showarrow=False,
+                               font=dict(size=11, color="darkgreen"))
+
+    st.plotly_chart(fig_matrix, use_container_width=True)
+
+    # Data timestamp
+    st.markdown("---")
+    st.caption("Data sources: USGS Mineral Commodity Summaries, DOE Critical Materials Assessment, World Bank")
 
 else:
-    st.error("Reference data files not found. Please ensure data files are in place.")
-    st.markdown("""
-    Expected files:
-    - `data/reference/materials_baseline.csv`
-    - `data/reference/doe_criticality.csv`
-    - `data/reference/kc_logistics.csv`
-    """)
+    st.error("Processed data not found. Please run the data processor first.")
+    st.code("python -m src.data_processor", language="bash")
