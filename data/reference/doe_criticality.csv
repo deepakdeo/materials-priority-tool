@@ -9,3 +9,6 @@ Copper,4,2,4,3,Near-Critical,EV/Grid
 Platinum Group,4,4,4,4,Critical,Fuel Cell
 Gallium,4,4,4,4,Critical,Semiconductor
 Vanadium,3,3,4,3,Near-Critical,Grid Storage
+Tin,3,2,3,3,Lower-Risk,Electronics
+Tungsten,4,4,4,4,Critical,Defense
+Zinc,3,3,4,3,Near-Critical,Galvanizing

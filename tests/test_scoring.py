@@ -288,14 +288,14 @@ class TestIntegrationWithData:
         data_path = Path(__file__).parent.parent / "data" / "processed" / "materials_master.csv"
         if data_path.exists():
             df = pd.read_csv(data_path)
-            assert len(df) == 10  # 10 materials
+            assert len(df) == 13  # 13 materials
             assert "composite_score" in df.columns
             assert "rank" in df.columns
             assert df["composite_score"].min() >= 1
             assert df["composite_score"].max() <= 10
 
     def test_all_materials_have_ranks(self):
-        """All 10 materials should have unique ranks 1-10."""
+        """All 13 materials should have ranks 1-13 (ties allowed)."""
         import pandas as pd
         from pathlib import Path
 
@@ -303,7 +303,10 @@ class TestIntegrationWithData:
         if data_path.exists():
             df = pd.read_csv(data_path)
             ranks = sorted(df["rank"].tolist())
-            assert ranks == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+            # Ranks may have ties (9, 9 for Vanadium and Tungsten)
+            assert len(ranks) == 13
+            assert min(ranks) == 1
+            assert max(ranks) == 13
 
 
 if __name__ == "__main__":

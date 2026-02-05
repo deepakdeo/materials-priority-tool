@@ -23,6 +23,9 @@ MATERIALS_LIST = [
     "Platinum Group",
     "Gallium",
     "Vanadium",
+    "Tin",
+    "Tungsten",
+    "Zinc",
 ]
 
 # Default scoring weights (must sum to 1.0)

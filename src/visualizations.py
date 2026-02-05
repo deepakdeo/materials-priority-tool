@@ -26,6 +26,13 @@ MATERIAL_COLORS = {
     "Graphite": "#d62728",
     "Rare Earths": "#9467bd",
     "Manganese": "#8c564b",
+    "Copper": "#e377c2",
+    "Platinum Group": "#7f7f7f",
+    "Gallium": "#bcbd22",
+    "Vanadium": "#17becf",
+    "Tin": "#aec7e8",
+    "Tungsten": "#ffbb78",
+    "Zinc": "#98df8a",
 }
 
 # Category colors

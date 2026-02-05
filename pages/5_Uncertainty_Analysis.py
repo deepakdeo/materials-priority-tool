@@ -12,6 +12,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from src.tour import render_tour_widget
 from src.auth import check_password, render_logout_button
+from src.theme import render_theme_toggle, apply_theme_css
+from src.feedback import render_feedback_widget
 
 st.set_page_config(page_title="Uncertainty Analysis", page_icon="🎲", layout="wide")
 
@@ -20,6 +22,9 @@ if not check_password():
     st.stop()
 
 render_logout_button()
+render_theme_toggle()
+render_feedback_widget()
+apply_theme_css()
 
 # Render tour widget if active
 render_tour_widget()
@@ -53,6 +58,9 @@ MATERIAL_COLORS = {
     "Platinum Group": "#7f7f7f",
     "Gallium": "#bcbd22",
     "Vanadium": "#17becf",
+    "Tin": "#aec7e8",
+    "Tungsten": "#ffbb78",
+    "Zinc": "#98df8a",
 }
 
 df = load_materials_data()

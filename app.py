@@ -15,6 +15,8 @@ import plotly.graph_objects as go
 sys.path.insert(0, str(Path(__file__).parent))
 from src.tour import render_tour_widget, render_tour_button
 from src.auth import check_password, render_logout_button
+from src.theme import render_theme_toggle, apply_theme_css
+from src.feedback import render_feedback_widget
 
 # Page configuration
 st.set_page_config(
@@ -30,6 +32,15 @@ if not check_password():
 
 # Render logout button in sidebar
 render_logout_button()
+
+# Theme toggle in sidebar
+render_theme_toggle()
+
+# Feedback widget in sidebar
+render_feedback_widget()
+
+# Apply theme CSS
+apply_theme_css()
 
 # Render tour widget at top if active
 render_tour_widget()
@@ -96,6 +107,27 @@ st.markdown("""
         padding: 2px 8px;
         border-radius: 4px;
         font-size: 0.8rem;
+    }
+
+    /* Mobile responsive styles for app components */
+    @media (max-width: 768px) {
+        .hero-stat {
+            padding: 15px;
+        }
+        .hero-stat h1 {
+            font-size: 1.8rem;
+        }
+        .feature-card {
+            padding: 15px;
+            margin-bottom: 10px;
+            min-height: auto;
+        }
+        .feature-card h4 {
+            font-size: 1rem;
+        }
+        .feature-card p {
+            font-size: 0.85rem;
+        }
     }
 </style>
 """, unsafe_allow_html=True)
