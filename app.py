@@ -306,7 +306,7 @@ if df is not None:
         | **World Bank Pink Sheet** | Historical commodity prices | [worldbank.org/commodities](https://www.worldbank.org/en/research/commodity-markets) |
         | **Bureau of Transportation Statistics** | KC logistics metrics | [bts.gov](https://www.bts.gov/) |
 
-        *Data was last updated: February 2024. See the [Data Refresh Guide](docs/data_refresh_guide.md) for update instructions.*
+        *Data was last updated: February 2024. See the [Data Refresh Guide](https://github.com/deepakdeo/materials-priority-tool/blob/main/docs/data_refresh_guide.md) for update instructions.*
         """)
 
 else:
