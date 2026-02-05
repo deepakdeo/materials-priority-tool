@@ -35,14 +35,20 @@ This tool scores and ranks materials based on five key factors:
 
 ### Materials Under Analysis
 
-Six critical materials essential to the battery and clean energy supply chain:
+Ten critical materials essential to the battery, clean energy, and semiconductor supply chains:
 
-- **Lithium** — Core battery material (Near-critical)
-- **Cobalt** — Battery cathode (Critical)
-- **Nickel** — Battery cathode (Near-critical → Critical)
-- **Natural Graphite** — Battery anode (Critical)
-- **Rare Earths** — Permanent magnets for EVs/wind (Critical)
-- **Manganese** — Battery cathode (Lower-risk)
+| Material | Primary Use | DOE Category |
+|----------|-------------|--------------|
+| **Lithium** | Battery | Near-Critical |
+| **Cobalt** | Battery | Critical |
+| **Nickel** | Battery | Near-Critical |
+| **Graphite** | Battery | Critical |
+| **Rare Earths** | Magnets | Critical |
+| **Manganese** | Battery | Lower-Risk |
+| **Copper** | EV/Grid | Near-Critical |
+| **Platinum Group** | Fuel Cells | Critical |
+| **Gallium** | Semiconductors | Critical |
+| **Vanadium** | Grid Storage | Near-Critical |
 
 ---
 
@@ -50,10 +56,19 @@ Six critical materials essential to the battery and clean energy supply chain:
 
 Use the sidebar to navigate between dashboard views:
 
-1. **Priority Rankings** — Composite scores and overall rankings
+1. **Priority Rankings** — Composite scores, rankings, and data export (CSV/Excel/PDF)
 2. **Material Deep Dives** — Individual material profiles and supply chain details
-3. **Trade-off Analysis** — Adjust scoring weights interactively
-4. **Market Monitor** — Price trends and volatility analysis
+3. **Trade-off Analysis** — Adjust weights interactively, save/load custom scenarios
+4. **Market Monitor** — Price trends, correlation heatmap, and supply risk metrics
+
+---
+
+### Key Features
+
+- **Export Data** — Download rankings as CSV, Excel, or PDF report
+- **Scenario Analysis** — Save and compare different weight configurations
+- **Interactive Visualizations** — Radar charts, stacked bars, correlation heatmaps
+- **10 Critical Materials** — Comprehensive coverage of battery, EV, and semiconductor supply chains
 
 ---
 
@@ -63,7 +78,7 @@ This tool is designed for:
 - Regional innovation engines focused on critical materials supply chains
 - Supply chain analysts evaluating material priorities
 - Policy makers assessing domestic production opportunities
-- Organizations building battery and clean energy infrastructure
+- Organizations building battery, clean energy, and semiconductor infrastructure
 """)
 
 # Footer
