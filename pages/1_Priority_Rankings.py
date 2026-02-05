@@ -5,6 +5,11 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from pathlib import Path
+import sys
+
+# Add src to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from src.utils import export_to_csv, export_to_excel, generate_pdf_report
 
 st.set_page_config(page_title="Priority Rankings", page_icon="📊", layout="wide")
 
@@ -64,6 +69,37 @@ if df is not None:
         width="stretch",
         hide_index=True,
     )
+
+    # Export buttons
+    st.subheader("Export Data")
+    export_cols = st.columns(3)
+
+    with export_cols[0]:
+        csv_data = export_to_csv(df)
+        st.download_button(
+            label="📄 Download CSV",
+            data=csv_data,
+            file_name="materials_priority_rankings.csv",
+            mime="text/csv",
+        )
+
+    with export_cols[1]:
+        excel_data = export_to_excel(df, "Priority Rankings")
+        st.download_button(
+            label="📊 Download Excel",
+            data=excel_data,
+            file_name="materials_priority_rankings.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        )
+
+    with export_cols[2]:
+        pdf_data = generate_pdf_report(df)
+        st.download_button(
+            label="📑 Download PDF Report",
+            data=pdf_data,
+            file_name="materials_priority_report.pdf",
+            mime="application/pdf",
+        )
 
     st.markdown("---")
 
@@ -148,6 +184,52 @@ if df is not None:
             )
             st.caption(f"Top producer: {row['top_producer']} ({row['top_producer_share_pct']}%)")
             st.caption(f"Import reliance: {row['import_reliance_pct']}%")
+
+    st.markdown("---")
+
+    # Score Breakdown Stacked Bar Chart
+    st.subheader("Score Breakdown by Factor")
+    st.caption("Contribution of each factor to composite score (weighted)")
+
+    # Calculate weighted contributions
+    weights = {"Supply Risk": 0.25, "Market Opp.": 0.20, "KC Advantage": 0.15,
+               "Feasibility": 0.20, "Strategic": 0.20}
+
+    breakdown_data = []
+    for _, row in df.iterrows():
+        breakdown_data.append({
+            "Material": row["material"],
+            "Supply Risk": row["supply_risk_score"] * weights["Supply Risk"],
+            "Market Opp.": row["market_opportunity_score"] * weights["Market Opp."],
+            "KC Advantage": row["kc_advantage_score"] * weights["KC Advantage"],
+            "Feasibility": row["production_feasibility_score"] * weights["Feasibility"],
+            "Strategic": row["strategic_alignment_score"] * weights["Strategic"],
+        })
+
+    breakdown_df = pd.DataFrame(breakdown_data)
+    breakdown_df = breakdown_df.set_index("Material")
+
+    fig_stacked = go.Figure()
+    colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd"]
+    for i, col in enumerate(breakdown_df.columns):
+        fig_stacked.add_trace(go.Bar(
+            name=col,
+            y=breakdown_df.index,
+            x=breakdown_df[col],
+            orientation='h',
+            marker_color=colors[i],
+        ))
+
+    fig_stacked.update_layout(
+        barmode='stack',
+        xaxis_title="Weighted Score Contribution",
+        yaxis_title="",
+        height=350,
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="center", x=0.5),
+        margin=dict(l=100, r=50, t=50, b=50),
+    )
+
+    st.plotly_chart(fig_stacked, use_container_width=True)
 
     st.markdown("---")
 

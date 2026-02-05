@@ -212,6 +212,40 @@ if df is not None:
 
     st.markdown("---")
 
+    # Metrics Correlation Heatmap
+    st.subheader("Metrics Correlation Heatmap")
+    st.caption("How different metrics relate to each other across materials")
+
+    corr_cols = ['import_reliance_pct', 'top_producer_share_pct', '5yr_price_change_pct',
+                 'demand_growth_pct', 'market_size_bn', 'composite_score']
+    corr_labels = ['Import Reliance', 'Producer Conc.', '5Y Price Change',
+                   'Demand Growth', 'Market Size', 'Composite Score']
+
+    corr_df = df[corr_cols].copy()
+    corr_df.columns = corr_labels
+    correlation_matrix = corr_df.corr()
+
+    fig_heatmap = go.Figure(data=go.Heatmap(
+        z=correlation_matrix.values,
+        x=corr_labels,
+        y=corr_labels,
+        colorscale='RdBu',
+        zmid=0,
+        text=correlation_matrix.round(2).values,
+        texttemplate='%{text}',
+        textfont={"size": 10},
+        hoverongaps=False,
+    ))
+
+    fig_heatmap.update_layout(
+        height=400,
+        margin=dict(l=100, r=50, t=20, b=100),
+    )
+
+    st.plotly_chart(fig_heatmap, use_container_width=True)
+
+    st.markdown("---")
+
     # Supply Risk Summary
     st.subheader("Supply Risk Summary")
 

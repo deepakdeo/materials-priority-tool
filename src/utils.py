@@ -1,7 +1,9 @@
 """Utility functions for Materials Priority Tool."""
 
+import io
 from pathlib import Path
 from typing import Any
+from datetime import datetime
 
 import pandas as pd
 
@@ -157,3 +159,115 @@ def truncate_text(text: str, max_length: int = 50) -> str:
     if len(text) <= max_length:
         return text
     return text[: max_length - 3] + "..."
+
+
+def export_to_csv(df: pd.DataFrame) -> bytes:
+    """Export DataFrame to CSV bytes.
+
+    Args:
+        df: DataFrame to export
+
+    Returns:
+        CSV data as bytes
+    """
+    return df.to_csv(index=False).encode('utf-8')
+
+
+def export_to_excel(df: pd.DataFrame, sheet_name: str = "Materials Data") -> bytes:
+    """Export DataFrame to Excel bytes.
+
+    Args:
+        df: DataFrame to export
+        sheet_name: Name for the Excel sheet
+
+    Returns:
+        Excel data as bytes
+    """
+    output = io.BytesIO()
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df.to_excel(writer, sheet_name=sheet_name, index=False)
+    return output.getvalue()
+
+
+def generate_pdf_report(df: pd.DataFrame, title: str = "Materials Priority Report") -> bytes:
+    """Generate a PDF report from materials data.
+
+    Args:
+        df: DataFrame with materials data
+        title: Report title
+
+    Returns:
+        PDF data as bytes
+    """
+    from fpdf import FPDF
+
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_auto_page_break(auto=True, margin=15)
+
+    # Title
+    pdf.set_font("Helvetica", "B", 16)
+    pdf.cell(0, 10, title, ln=True, align="C")
+    pdf.ln(5)
+
+    # Date
+    pdf.set_font("Helvetica", "", 10)
+    pdf.cell(0, 10, f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M')}", ln=True, align="C")
+    pdf.ln(10)
+
+    # Executive Summary
+    pdf.set_font("Helvetica", "B", 12)
+    pdf.cell(0, 10, "Priority Rankings", ln=True)
+    pdf.ln(2)
+
+    # Rankings table
+    pdf.set_font("Helvetica", "B", 9)
+    col_widths = [15, 35, 25, 25, 25, 30, 35]
+    headers = ["Rank", "Material", "Score", "Supply Risk", "Market Opp.", "KC Advantage", "Criticality"]
+
+    for i, header in enumerate(headers):
+        pdf.cell(col_widths[i], 8, header, border=1, align="C")
+    pdf.ln()
+
+    pdf.set_font("Helvetica", "", 9)
+    for _, row in df.iterrows():
+        pdf.cell(col_widths[0], 8, str(int(row.get('rank', 0))), border=1, align="C")
+        pdf.cell(col_widths[1], 8, str(row.get('material', '')), border=1)
+        pdf.cell(col_widths[2], 8, f"{row.get('composite_score', 0):.2f}", border=1, align="C")
+        pdf.cell(col_widths[3], 8, f"{row.get('supply_risk_score', 0):.1f}", border=1, align="C")
+        pdf.cell(col_widths[4], 8, f"{row.get('market_opportunity_score', 0):.1f}", border=1, align="C")
+        pdf.cell(col_widths[5], 8, f"{row.get('kc_advantage_score', 0):.1f}", border=1, align="C")
+        pdf.cell(col_widths[6], 8, str(row.get('criticality_category', '')), border=1, align="C")
+        pdf.ln()
+
+    pdf.ln(10)
+
+    # Key Findings
+    pdf.set_font("Helvetica", "B", 12)
+    pdf.cell(0, 10, "Key Findings", ln=True)
+    pdf.ln(2)
+
+    pdf.set_font("Helvetica", "", 10)
+    top_material = df.iloc[0] if len(df) > 0 else None
+    if top_material is not None:
+        pdf.multi_cell(0, 6, f"1. Top Priority: {top_material['material']} with composite score of {top_material['composite_score']:.2f}")
+        pdf.ln(2)
+
+    # Count critical materials
+    critical_count = len(df[df['criticality_category'] == 'Critical']) if 'criticality_category' in df.columns else 0
+    pdf.multi_cell(0, 6, f"2. {critical_count} materials rated as 'Critical' by DOE assessment")
+    pdf.ln(2)
+
+    # High import reliance
+    high_import = df[df['import_reliance_pct'] >= 75] if 'import_reliance_pct' in df.columns else pd.DataFrame()
+    if len(high_import) > 0:
+        materials_list = ", ".join(high_import['material'].tolist())
+        pdf.multi_cell(0, 6, f"3. High import reliance (>=75%): {materials_list}")
+
+    pdf.ln(10)
+
+    # Footer
+    pdf.set_font("Helvetica", "I", 8)
+    pdf.cell(0, 10, "Data sources: USGS Mineral Commodity Summaries, DOE Critical Materials Assessment", ln=True)
+
+    return bytes(pdf.output())
