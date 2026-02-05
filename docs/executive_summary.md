@@ -80,10 +80,12 @@ The dashboard provides:
 
 ### Data Sources
 
-- **USGS Mineral Commodity Summaries 2024** — Production, imports, exports, prices
-- **DOE 2023 Critical Materials Assessment** — Criticality ratings (Importance to Energy, Supply Risk)
-- **World Bank Pink Sheet** — Historical commodity prices
-- **Bureau of Transportation Statistics** — KC logistics metrics
+| Source | Description | Link |
+|--------|-------------|------|
+| **USGS Mineral Commodity Summaries 2024** | Production, imports, exports, prices | [usgs.gov/mcs](https://www.usgs.gov/centers/national-minerals-information-center/mineral-commodity-summaries) |
+| **DOE 2023 Critical Materials Assessment** | Criticality ratings (Importance to Energy, Supply Risk) | [energy.gov/critical-materials](https://www.energy.gov/eere/vehicles/articles/2023-critical-materials-assessment) |
+| **World Bank Pink Sheet** | Historical commodity prices | [worldbank.org/commodities](https://www.worldbank.org/en/research/commodity-markets) |
+| **Bureau of Transportation Statistics** | KC logistics metrics | [bts.gov](https://www.bts.gov/) |
 
 ---
 

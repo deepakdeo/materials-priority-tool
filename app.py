@@ -299,10 +299,14 @@ if df is not None:
     # Data sources
     with st.expander("📚 **Data Sources** — Where the data comes from", expanded=False):
         st.markdown("""
-        - **USGS Mineral Commodity Summaries 2024** — Production, imports, prices
-        - **DOE Critical Materials Assessment 2023** — Criticality ratings
-        - **World Bank Pink Sheet** — Historical commodity prices
-        - **Bureau of Transportation Statistics** — KC logistics metrics
+        | Source | Description | Link |
+        |--------|-------------|------|
+        | **USGS Mineral Commodity Summaries 2024** | Production, imports, prices | [usgs.gov/mcs](https://www.usgs.gov/centers/national-minerals-information-center/mineral-commodity-summaries) |
+        | **DOE Critical Materials Assessment 2023** | Criticality ratings | [energy.gov/critical-materials](https://www.energy.gov/eere/vehicles/articles/2023-critical-materials-assessment) |
+        | **World Bank Pink Sheet** | Historical commodity prices | [worldbank.org/commodities](https://www.worldbank.org/en/research/commodity-markets) |
+        | **Bureau of Transportation Statistics** | KC logistics metrics | [bts.gov](https://www.bts.gov/) |
+
+        *Data was last updated: February 2024. See the [Data Refresh Guide](docs/data_refresh_guide.md) for update instructions.*
         """)
 
 else:
