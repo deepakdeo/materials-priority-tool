@@ -1,13 +1,28 @@
 """Trade-off Analysis Page - Interactive weight adjustment."""
 
 import json
+import sys
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 from pathlib import Path
 from datetime import datetime
 
+# Add src to path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from src.tour import render_tour_widget
+from src.auth import check_password, render_logout_button
+
 st.set_page_config(page_title="Trade-off Analysis", page_icon="⚖️", layout="wide")
+
+# Check authentication
+if not check_password():
+    st.stop()
+
+render_logout_button()
+
+# Render tour widget if active
+render_tour_widget()
 
 st.title("⚖️ Trade-off Analysis")
 st.markdown("Adjust scoring weights to explore different prioritization scenarios.")

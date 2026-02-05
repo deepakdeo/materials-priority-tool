@@ -1,11 +1,26 @@
 """Material Deep Dives Page - Individual material profiles."""
 
+import sys
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 from pathlib import Path
 
+# Add src to path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from src.tour import render_tour_widget
+from src.auth import check_password, render_logout_button
+
 st.set_page_config(page_title="Material Deep Dives", page_icon="🔍", layout="wide")
+
+# Check authentication
+if not check_password():
+    st.stop()
+
+render_logout_button()
+
+# Render tour widget if active
+render_tour_widget()
 
 st.title("🔍 Material Deep Dives")
 st.markdown("Detailed profiles for each critical material.")

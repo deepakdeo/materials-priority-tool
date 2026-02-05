@@ -10,8 +10,19 @@ import sys
 # Add src to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from src.utils import export_to_csv, export_to_excel, generate_pdf_report
+from src.tour import render_tour_widget
+from src.auth import check_password, render_logout_button
 
 st.set_page_config(page_title="Priority Rankings", page_icon="📊", layout="wide")
+
+# Check authentication
+if not check_password():
+    st.stop()
+
+render_logout_button()
+
+# Render tour widget if active
+render_tour_widget()
 
 st.title("📊 Priority Rankings")
 st.markdown("Composite scores and rankings for critical materials based on 5-factor analysis.")
