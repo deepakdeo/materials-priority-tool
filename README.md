@@ -6,22 +6,6 @@ A Streamlit decision-support dashboard for scoring and ranking critical material
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Demo
-
-### Dashboard Overview
-![Dashboard Home](docs/screenshots/dashboard-home.png)
-*The main dashboard showing top priority materials, key metrics, and score overview chart.*
-
-### Priority Rankings
-![Priority Rankings](docs/screenshots/priority-rankings.png)
-*Complete material rankings with composite scores, radar chart comparison, and criticality matrix.*
-
-### Trade-off Analysis
-![Trade-off Analysis](docs/screenshots/tradeoff-analysis.png)
-*Interactive weight adjustment to explore different prioritization scenarios.*
-
-> **Note:** Screenshots coming soon. Run the app locally or visit the [live demo](https://materials-priority-tool.streamlit.app) to see it in action.
-
 ## Overview
 
 This tool evaluates **13 critical materials** essential to battery, clean energy, defense, and semiconductor supply chains:

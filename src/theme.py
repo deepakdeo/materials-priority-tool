@@ -140,6 +140,75 @@ def apply_theme_css():
             .stCaption {{
                 color: #888 !important;
             }}
+
+            /* Buttons - fix white text on white background */
+            .stButton > button {{
+                background-color: {theme['secondary_background']} !important;
+                color: {theme['text']} !important;
+                border: 1px solid #444 !important;
+            }}
+
+            .stButton > button:hover {{
+                background-color: #3a3a4a !important;
+                color: {theme['text']} !important;
+                border-color: {theme['primary']} !important;
+            }}
+
+            /* Primary buttons */
+            .stButton > button[kind="primary"],
+            .stButton > button[data-testid="baseButton-primary"] {{
+                background-color: {theme['primary']} !important;
+                color: white !important;
+                border: none !important;
+            }}
+
+            /* Download buttons */
+            .stDownloadButton > button {{
+                background-color: {theme['secondary_background']} !important;
+                color: {theme['text']} !important;
+                border: 1px solid #444 !important;
+            }}
+
+            /* Tabs */
+            .stTabs [data-baseweb="tab-list"] {{
+                background-color: {theme['secondary_background']};
+            }}
+
+            .stTabs [data-baseweb="tab"] {{
+                color: {theme['text']} !important;
+                background-color: transparent !important;
+            }}
+
+            .stTabs [aria-selected="true"] {{
+                background-color: {theme['background']} !important;
+                color: {theme['primary']} !important;
+            }}
+
+            /* Radio buttons and checkboxes */
+            .stRadio > div,
+            .stCheckbox > div {{
+                color: {theme['text']} !important;
+            }}
+
+            /* Multiselect */
+            .stMultiSelect > div > div {{
+                background-color: {theme['secondary_background']} !important;
+                color: {theme['text']} !important;
+            }}
+
+            /* Links */
+            a {{
+                color: {theme['primary']} !important;
+            }}
+
+            /* Sidebar navigation links */
+            section[data-testid="stSidebar"] a {{
+                color: {theme['text']} !important;
+            }}
+
+            section[data-testid="stSidebar"] a:hover {{
+                color: {theme['primary']} !important;
+            }}
         </style>
         """, unsafe_allow_html=True)
 

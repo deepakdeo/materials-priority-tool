@@ -239,7 +239,7 @@ if df is not None:
             xaxis_title="Composite Score",
             yaxis_title="",
             xaxis=dict(range=[0, 10]),
-            height=350,
+            height=450,
             margin=dict(l=10, r=50, t=10, b=30),
             showlegend=False,
         )
