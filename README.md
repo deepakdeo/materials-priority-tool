@@ -51,12 +51,27 @@ pip install -r requirements.txt
 
 ## Usage
 
+### Local Development
+
 ```bash
 # Run the Streamlit app
 streamlit run app.py
 ```
 
 The dashboard will open at `http://localhost:8501`
+
+### Deploy to Streamlit Cloud
+
+1. Push your code to GitHub
+2. Go to [share.streamlit.io](https://share.streamlit.io)
+3. Sign in with GitHub
+4. Click "New app" and select:
+   - Repository: `your-username/materials-priority-tool`
+   - Branch: `main`
+   - Main file path: `app.py`
+5. Click "Deploy"
+
+The app will be live at `https://your-app-name.streamlit.app`
 
 ## Data Sources
 
