@@ -55,7 +55,7 @@ if df is not None:
     st.subheader("Material Rankings")
 
     display_cols = [
-        "rank", "material", "composite_score",
+        "rank", "material", "primary_use", "composite_score",
         "supply_risk_score", "market_opportunity_score", "kc_advantage_score",
         "production_feasibility_score", "strategic_alignment_score",
         "criticality_category"

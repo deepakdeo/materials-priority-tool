@@ -50,12 +50,14 @@ if df is not None:
         color = MATERIAL_COLORS.get(selected, "#636EFA")
 
         # Header with rank and criticality badge
-        col1, col2, col3 = st.columns([2, 1, 1])
+        col1, col2, col3, col4 = st.columns([2, 1, 1, 1])
         with col1:
             st.header(selected)
         with col2:
             st.metric("Rank", f"#{int(row['rank'])}")
         with col3:
+            st.metric("Primary Use", row.get("primary_use", "N/A"))
+        with col4:
             category = row["criticality_category"]
             if category == "Critical":
                 st.error(f"🔴 {category}")
