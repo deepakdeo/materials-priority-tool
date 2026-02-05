@@ -61,7 +61,7 @@ if df is not None:
             "production_feasibility_score": "{:.1f}",
             "strategic_alignment_score": "{:.1f}",
         }).background_gradient(subset=['composite_score'], cmap='RdYlGn'),
-        use_container_width=True,
+        width="stretch",
         hide_index=True,
     )
 

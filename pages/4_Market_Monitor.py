@@ -67,7 +67,7 @@ if df is not None:
             'Demand Growth (%/yr)': '{:.0f}%',
             'Market Size ($B)': '${:.1f}B',
         }).background_gradient(subset=['5Y Change (%)'], cmap='RdYlGn'),
-        use_container_width=True,
+        width="stretch",
         hide_index=True,
     )
 
@@ -228,7 +228,7 @@ if df is not None:
             'Risk Level': risk_level,
         })
 
-    st.dataframe(pd.DataFrame(risk_data), use_container_width=True, hide_index=True)
+    st.dataframe(pd.DataFrame(risk_data), width="stretch", hide_index=True)
 
     # World Bank price history (if available)
     if price_df is not None and not price_df.empty:
