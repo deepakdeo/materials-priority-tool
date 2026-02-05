@@ -1,14 +1,20 @@
 """Trade-off Analysis Page - Interactive weight adjustment."""
 
+import json
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 from pathlib import Path
+from datetime import datetime
 
 st.set_page_config(page_title="Trade-off Analysis", page_icon="⚖️", layout="wide")
 
 st.title("⚖️ Trade-off Analysis")
 st.markdown("Adjust scoring weights to explore different prioritization scenarios.")
+
+# Initialize session state for saved scenarios
+if "saved_scenarios" not in st.session_state:
+    st.session_state.saved_scenarios = {}
 
 # Data paths
 DATA_DIR = Path(__file__).parent.parent / "data"
@@ -32,6 +38,10 @@ MATERIAL_COLORS = {
     "Graphite": "#d62728",
     "Rare Earths": "#9467bd",
     "Manganese": "#8c564b",
+    "Copper": "#e377c2",
+    "Platinum Group": "#7f7f7f",
+    "Gallium": "#bcbd22",
+    "Vanadium": "#17becf",
 }
 
 df = load_materials_data()
@@ -50,8 +60,14 @@ if df is not None:
         ["Custom", "Default (Balanced)", "Supply Security Focus", "Market Opportunity Focus", "KC Advantage Focus"]
     )
 
-    # Set default values based on preset
-    if preset == "Default (Balanced)":
+    # Set default values based on preset or loaded scenario
+    if "load_weights" in st.session_state:
+        lw = st.session_state.pop("load_weights")
+        default_weights = (
+            lw["supply_risk"], lw["market_opportunity"], lw["kc_advantage"],
+            lw["production_feasibility"], lw["strategic_alignment"]
+        )
+    elif preset == "Default (Balanced)":
         default_weights = (25, 20, 15, 20, 20)
     elif preset == "Supply Security Focus":
         default_weights = (40, 10, 10, 15, 25)
@@ -83,6 +99,52 @@ if df is not None:
     else:
         st.sidebar.success("✓ Weights sum to 100%")
         weights_valid = True
+
+    # Scenario Save/Load Section
+    st.sidebar.markdown("---")
+    st.sidebar.subheader("Save/Load Scenarios")
+
+    # Save current scenario
+    scenario_name = st.sidebar.text_input("Scenario name:", placeholder="My Custom Scenario")
+    if st.sidebar.button("💾 Save Current Scenario") and scenario_name:
+        st.session_state.saved_scenarios[scenario_name] = {
+            "supply_risk": w_supply,
+            "market_opportunity": w_market,
+            "kc_advantage": w_kc,
+            "production_feasibility": w_feasibility,
+            "strategic_alignment": w_strategic,
+            "saved_at": datetime.now().isoformat(),
+        }
+        st.sidebar.success(f"Saved: {scenario_name}")
+
+    # Load saved scenario
+    if st.session_state.saved_scenarios:
+        saved_names = list(st.session_state.saved_scenarios.keys())
+        selected_scenario = st.sidebar.selectbox("Load saved scenario:", [""] + saved_names)
+        if selected_scenario and st.sidebar.button("📂 Load Scenario"):
+            scenario = st.session_state.saved_scenarios[selected_scenario]
+            st.session_state["load_weights"] = scenario
+            st.rerun()
+
+    # Export scenarios as JSON
+    if st.session_state.saved_scenarios:
+        scenarios_json = json.dumps(st.session_state.saved_scenarios, indent=2)
+        st.sidebar.download_button(
+            label="📥 Export All Scenarios",
+            data=scenarios_json,
+            file_name="weight_scenarios.json",
+            mime="application/json",
+        )
+
+    # Import scenarios from JSON
+    uploaded_file = st.sidebar.file_uploader("📤 Import Scenarios", type="json", key="scenario_upload")
+    if uploaded_file is not None:
+        try:
+            imported = json.load(uploaded_file)
+            st.session_state.saved_scenarios.update(imported)
+            st.sidebar.success(f"Imported {len(imported)} scenario(s)")
+        except json.JSONDecodeError:
+            st.sidebar.error("Invalid JSON file")
 
     # Show current weights
     st.subheader("Current Weight Configuration")

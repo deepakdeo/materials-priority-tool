@@ -38,6 +38,10 @@ MATERIAL_COLORS = {
     "Graphite": "#d62728",
     "Rare Earths": "#9467bd",
     "Manganese": "#8c564b",
+    "Copper": "#e377c2",
+    "Platinum Group": "#7f7f7f",
+    "Gallium": "#bcbd22",
+    "Vanadium": "#17becf",
 }
 
 # Load data

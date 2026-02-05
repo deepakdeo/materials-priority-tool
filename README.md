@@ -4,7 +4,7 @@ A Streamlit decision-support dashboard for scoring and ranking critical material
 
 ## Overview
 
-This tool evaluates six critical materials essential to the battery and clean energy supply chain:
+This tool evaluates ten critical materials essential to the battery, clean energy, and semiconductor supply chains:
 
 | Material | DOE Category | Primary Use |
 |----------|--------------|-------------|
@@ -14,6 +14,10 @@ This tool evaluates six critical materials essential to the battery and clean en
 | Natural Graphite | Critical | Battery anode |
 | Rare Earths | Critical | Permanent magnets |
 | Manganese | Lower-Risk | Battery cathode |
+| Copper | Near-Critical | EV/Grid infrastructure |
+| Platinum Group | Critical | Fuel cells |
+| Gallium | Critical | Semiconductors |
+| Vanadium | Near-Critical | Grid storage |
 
 ## Scoring Framework
 

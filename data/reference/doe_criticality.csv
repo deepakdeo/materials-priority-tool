@@ -5,3 +5,7 @@ Nickel,3,3,4,4,Near-Critical,Battery
 Graphite,4,4,4,4,Critical,Battery
 Rare Earths,4,4,4,4,Critical,Magnet
 Manganese,3,2,3,2,Lower-Risk,Battery
+Copper,4,2,4,3,Near-Critical,EV/Grid
+Platinum Group,4,4,4,4,Critical,Fuel Cell
+Gallium,4,4,4,4,Critical,Semiconductor
+Vanadium,3,3,4,3,Near-Critical,Grid Storage

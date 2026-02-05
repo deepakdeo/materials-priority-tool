@@ -19,6 +19,10 @@ MATERIALS_LIST = [
     "Graphite",
     "Rare Earths",
     "Manganese",
+    "Copper",
+    "Platinum Group",
+    "Gallium",
+    "Vanadium",
 ]
 
 # Default scoring weights (must sum to 1.0)
