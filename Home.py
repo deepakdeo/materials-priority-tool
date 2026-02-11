@@ -134,23 +134,32 @@ st.markdown("""
 
 # Hero Section
 st.markdown("# 🔋 Materials Priority Tool")
-st.markdown("##### Data-driven decision support for critical materials prioritization")
+st.markdown("*Data-driven decision support for critical materials prioritization*")
 
-# Value proposition - what and why
+st.markdown("")  # Spacing
+
+# Value proposition in a styled container
 st.markdown("""
-**Which critical materials should the US prioritize for domestic production?**
+<div style="background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+            padding: 1.5rem; border-radius: 10px; border-left: 4px solid #667eea; margin-bottom: 1rem;">
+    <p style="font-size: 1.1rem; font-weight: 600; color: #1a1a2e; margin-bottom: 0.75rem;">
+        Which critical materials should the US prioritize for domestic production?
+    </p>
+    <p style="color: #444; margin-bottom: 0; line-height: 1.6;">
+        This tool answers that question using verified government data (USGS, DOE).
+        Materials are scored on <strong>supply risk</strong>, <strong>strategic importance</strong>,
+        and <strong>production feasibility</strong>. The resulting ranking shows which materials
+        deserve focus first for domestic production investment. Every number is traceable to source documents.
+    </p>
+</div>
+""", unsafe_allow_html=True)
 
-This tool answers that question using verified government data (USGS, DOE).
-Materials are scored on **supply risk**, **strategic importance**, and **production feasibility**.
-The resulting ranking shows which materials deserve focus first for domestic production investment.
-Every number is traceable to source documents.
-""")
-
-# Tour button below value proposition
-col_tour, col_spacer = st.columns([1, 4])
+# Tour section
+col_tour, col_spacer = st.columns([1, 3])
 with col_tour:
     render_tour_button()
-st.caption("Take a guided tour to learn how the tool works")
+with col_spacer:
+    st.markdown("<p style='color: #666; margin-top: 0.5rem;'>New here? Learn how the tool works</p>", unsafe_allow_html=True)
 
 st.markdown("---")
 
