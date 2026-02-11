@@ -312,6 +312,10 @@ if df is not None:
         All data is verified and traceable to government sources.
 
         Adjust weights in the Trade-off Analysis page to match your priorities.
+
+        ---
+        *This framework is extensible. Additional factors (regional logistics advantages, market projections,
+        proprietary assessments) can be incorporated as verified data becomes available.*
         """)
 
     # Materials Grid (collapsed)
