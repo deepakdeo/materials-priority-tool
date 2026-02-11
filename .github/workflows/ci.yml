@@ -46,8 +46,9 @@ jobs:
 
       - name: Check Python syntax
         run: |
-          python -m py_compile app.py
+          python -m py_compile Home.py
           python -m py_compile src/scoring.py
           python -m py_compile src/utils.py
           python -m py_compile src/data_loader.py
+          python -m py_compile src/data_processor.py
           echo "Syntax check passed"
