@@ -140,19 +140,16 @@ st.markdown("##### Data-driven decision support for critical materials prioritiz
 st.markdown("""
 **Which critical materials should the US prioritize for domestic production?**
 
-Critical materials decisions are often based on outdated reports or opaque methodologies.
-This tool provides a **transparent, data-driven alternative**:
-
-- **Traceable data** — Every number links to USGS or DOE source documents
-- **Interactive analysis** — Adjust scoring weights to match your priorities
-- **Quantified uncertainty** — Know your confidence level, not just the ranking
+This tool answers that question using verified government data (USGS, DOE).
+Materials are scored on **supply risk**, **strategic importance**, and **production feasibility**,
+then ranked to identify priorities. Every number is traceable to source documents.
 """)
 
 # Tour button below value proposition
-st.markdown("##### New here?")
 col_tour, col_spacer = st.columns([1, 4])
 with col_tour:
     render_tour_button()
+st.caption("Take a guided tour to learn how the tool works")
 
 st.markdown("---")
 
