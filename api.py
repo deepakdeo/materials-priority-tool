@@ -172,32 +172,22 @@ if FASTAPI_AVAILABLE:
 
             record = match.iloc[0].to_dict()
 
-            # Add score breakdown
+            # Add score breakdown (3-factor model)
             record["score_breakdown"] = {
                 "supply_risk": {
                     "score": record.get("supply_risk_score"),
-                    "weight": "25%",
-                    "weighted": record.get("supply_risk_score", 0) * 0.25,
+                    "weight": "40%",
+                    "weighted": record.get("supply_risk_score", 0) * 0.40,
                 },
-                "market_opportunity": {
-                    "score": record.get("market_opportunity_score"),
-                    "weight": "20%",
-                    "weighted": record.get("market_opportunity_score", 0) * 0.20,
-                },
-                "kc_advantage": {
-                    "score": record.get("kc_advantage_score"),
-                    "weight": "15%",
-                    "weighted": record.get("kc_advantage_score", 0) * 0.15,
+                "strategic_alignment": {
+                    "score": record.get("strategic_alignment_score"),
+                    "weight": "40%",
+                    "weighted": record.get("strategic_alignment_score", 0) * 0.40,
                 },
                 "production_feasibility": {
                     "score": record.get("production_feasibility_score"),
                     "weight": "20%",
                     "weighted": record.get("production_feasibility_score", 0) * 0.20,
-                },
-                "strategic_alignment": {
-                    "score": record.get("strategic_alignment_score"),
-                    "weight": "20%",
-                    "weighted": record.get("strategic_alignment_score", 0) * 0.20,
                 },
             }
 
