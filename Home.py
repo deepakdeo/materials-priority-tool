@@ -352,7 +352,12 @@ else:
 st.markdown("---")
 st.markdown("""
 <div style="text-align: center; color: #888; font-size: 0.9rem;">
-    <p>Materials Priority Tool | Data-driven decision support for critical materials prioritization</p>
-    <p>Data sources: USGS • DOE • World Bank</p>
+    <p><strong>Materials Priority Tool</strong> | Data-driven decision support for critical materials prioritization</p>
+    <p>Data sources: USGS MCS 2024 • DOE Critical Materials Assessment 2023</p>
+    <p style="margin-top: 10px;">
+        Built by <strong>Deepak Deo</strong> |
+        <a href="https://github.com/deepakdeo" target="_blank">GitHub</a> •
+        <a href="https://linkedin.com/in/deepakdeo" target="_blank">LinkedIn</a>
+    </p>
 </div>
 """, unsafe_allow_html=True)
