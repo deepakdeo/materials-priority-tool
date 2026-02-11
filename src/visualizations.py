@@ -2,11 +2,15 @@
 
 This module generates Plotly charts for the Streamlit dashboard:
 - Composite score bar chart
-- Radar/spider chart for material comparison
+- Radar/spider chart for material comparison (3-factor model)
 - Criticality matrix scatter plot
 - Price history line charts
 - Import dependency bar chart
-- KC hub map
+
+3-FACTOR MODEL:
+1. Supply Risk (40%) — Import reliance + producer concentration
+2. Strategic Alignment (40%) — DOE criticality category
+3. Production Feasibility (20%) — Whether US production exists
 """
 
 from typing import Optional
@@ -99,18 +103,14 @@ def create_radar_chart(
     """
     categories = [
         "Supply Risk",
-        "Market Opportunity",
-        "KC Advantage",
-        "Production Feasibility",
         "Strategic Alignment",
+        "Production Feasibility",
     ]
 
     score_columns = [
-        "supply_risk",
-        "market_opportunity",
-        "kc_advantage",
-        "production_feasibility",
-        "strategic_alignment",
+        "supply_risk_score",
+        "strategic_alignment_score",
+        "production_feasibility_score",
     ]
 
     fig = go.Figure()
@@ -313,10 +313,8 @@ def create_summary_cards_data(scores_df: pd.DataFrame) -> list[dict]:
 def _get_top_factor(row: pd.Series) -> str:
     """Get the highest-scoring factor for a material."""
     factors = {
-        "Supply Risk": row.get("supply_risk", 0),
-        "Market Opportunity": row.get("market_opportunity", 0),
-        "KC Advantage": row.get("kc_advantage", 0),
-        "Production Feasibility": row.get("production_feasibility", 0),
-        "Strategic Alignment": row.get("strategic_alignment", 0),
+        "Supply Risk": row.get("supply_risk_score", 0),
+        "Strategic Alignment": row.get("strategic_alignment_score", 0),
+        "Production Feasibility": row.get("production_feasibility_score", 0),
     }
     return max(factors, key=factors.get)

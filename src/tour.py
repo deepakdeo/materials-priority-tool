@@ -7,31 +7,31 @@ TOUR_STEPS = [
     {
         "title": "Welcome to the Materials Priority Tool",
         "content": """
-This tool helps you prioritize critical materials for domestic production by scoring
-and ranking them across 5 key factors.
+This tool helps you prioritize critical materials for domestic production using
+a **transparent, data-driven methodology**.
 
 **What you'll learn:**
-- How materials are scored and ranked
+- How materials are scored using verified government data
 - How to explore individual material profiles
 - How to adjust weights for your priorities
-- How to export data and save scenarios
+- How to understand ranking confidence
         """,
         "page": "Home",
     },
     {
         "title": "Understanding the Scoring Framework",
         "content": """
-Each material is scored on **5 factors** (1-10 scale):
+Each material is scored on **3 factors** using only verified data:
 
-| Factor | Weight | Higher Score Means |
-|--------|--------|-------------------|
-| Supply Risk | 25% | More vulnerable supply chain |
-| Market Opportunity | 20% | Better growth/price potential |
-| KC Advantage | 15% | Better fit for Kansas City |
-| Production Feasibility | 20% | Easier to produce domestically |
-| Strategic Alignment | 20% | Higher national priority |
+| Factor | Weight | What It Measures | Source |
+|--------|--------|------------------|--------|
+| Supply Risk | 40% | Import reliance + producer concentration | USGS MCS 2024 |
+| Strategic Alignment | 40% | DOE criticality category | DOE 2023 |
+| Production Feasibility | 20% | Whether US production exists | USGS MCS 2024 |
 
 The **composite score** is a weighted average of these factors.
+
+*Every number is traceable to government sources — no black boxes.*
         """,
         "page": "Home",
     },
@@ -56,11 +56,10 @@ This page shows:
 **Navigate to: Material Deep Dives** (sidebar)
 
 Select any material to see:
-- 🏷️ **Score breakdown** — All 5 factor scores explained
+- 🏷️ **Score breakdown** — All 3 factor scores with weights
 - 🌍 **Supply chain overview** — Import reliance, top producers
-- 💰 **Market data** — Prices, growth projections
-- 🏭 **KC advantage details** — Why KC is (or isn't) a good fit
-- 📋 **DOE assessment** — Official criticality ratings
+- 📋 **DOE assessment** — Official criticality categories (Critical, Near-Critical, Not-Critical)
+- 📊 **Radar chart** — Visual score profile
 
 **Pro tip:** Compare materials by opening multiple browser tabs!
         """,
@@ -78,42 +77,42 @@ This is where it gets interactive:
 - 📥 **Export scenarios** — Download as JSON to share with colleagues
 
 **Example scenarios:**
-- "Supply Security Focus" — Prioritizes reducing import dependence
-- "Market Opportunity Focus" — Prioritizes growth potential
-- "KC Advantage Focus" — Prioritizes local logistics fit
+- "Supply Security Focus" — Weight supply risk at 60%
+- "Strategic Focus" — Weight DOE alignment at 60%
+- "Feasibility Focus" — Prioritize materials with existing US production
         """,
         "page": "Trade-off Analysis",
     },
     {
-        "title": "Market Monitor Page",
+        "title": "Supply Chain Monitor Page",
         "content": """
-**Navigate to: Market Monitor** (sidebar)
+**Navigate to: Supply Chain Monitor** (sidebar)
 
-Track market dynamics:
-- 💵 **Current prices** — 2024 prices and 5-year changes
-- 📈 **Demand growth** — Projected annual growth rates
-- 🔴 **Import reliance** — Visual risk indicators
+Track supply chain metrics:
+- 🔴 **Import reliance** — Visual risk indicators by material
+- 🌍 **Producer concentration** — Who controls supply?
+- 📊 **DOE categories** — Distribution of criticality ratings
 - 🔥 **Correlation heatmap** — How metrics relate to each other
 
-**Key insight:** Materials with high import reliance AND high demand growth
-are the most strategically important to prioritize.
+**Key insight:** Materials with high import reliance AND Critical DOE rating
+are the highest priority for domestic production.
         """,
-        "page": "Market Monitor",
+        "page": "Supply Chain Monitor",
     },
     {
         "title": "Uncertainty Analysis Page",
         "content": """
 **Navigate to: Uncertainty Analysis** (sidebar)
 
-This is the most advanced feature — Monte Carlo simulation:
+Monte Carlo simulation shows **how confident** you can be in rankings:
 - 🎲 **Run 1000+ simulations** with randomized inputs
-- 📊 **See ranking probabilities** — "Lithium is #1 in 73% of scenarios"
+- 📊 **See ranking probabilities** — "Rare Earths is #1 in 85% of scenarios"
 - 📈 **Score distributions** — Box plots showing uncertainty ranges
-- 🎯 **Confidence levels** — Know how certain your rankings are
+- 🎯 **Confidence levels** — High (>80%), Medium (50-80%), Low (<50%)
 
 **Why it matters:**
-Real data has uncertainty. This tells you whether Lithium is
-*definitely* #1, or if Graphite has a 40% chance of taking the top spot.
+If two materials swap places in 40% of simulations, that's a close call
+worth more research. If one is #1 in 95% of simulations, that's definitive.
         """,
         "page": "Uncertainty Analysis",
     },
@@ -125,15 +124,15 @@ Real data has uncertainty. This tells you whether Lithium is
 Quick reference:
 - **Rankings** → See overall priorities
 - **Deep Dives** → Explore individual materials
-- **Trade-offs** → Test different strategies
-- **Market Monitor** → Track market conditions
-- **Uncertainty** → Understand ranking confidence
+- **Trade-offs** → Test different weight strategies
+- **Supply Chain** → Understand import & concentration risks
+- **Uncertainty** → Know your confidence level
 
-**Next steps:**
-1. Check the Priority Rankings to see current recommendations
-2. Adjust weights in Trade-off Analysis to match your priorities
-3. Run Monte Carlo simulation to understand confidence levels
-4. Export a PDF report to share with stakeholders
+**Key differentiators of this tool:**
+- ✅ 100% traceable data (USGS, DOE sources)
+- ✅ Interactive what-if analysis
+- ✅ Uncertainty quantification
+- ✅ Open methodology — verify any calculation
 
 Happy analyzing! 🔋
         """,

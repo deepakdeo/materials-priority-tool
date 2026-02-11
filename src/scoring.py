@@ -1,11 +1,17 @@
 """Scoring engine for Materials Priority Tool.
 
-This module implements the 5-factor scoring methodology:
-1. Supply Risk Score (25%) — Import dependency, geographic concentration
-2. Market Opportunity Score (20%) — Price trends, demand growth
-3. KC Advantage Score (15%) — Kansas City logistics benefits
-4. Production Feasibility Score (20%) — Domestic production maturity
-5. Strategic Alignment Score (20%) — DOE criticality, battery/EV alignment
+NOTE: This module contains LEGACY functions from an earlier 5-factor prototype.
+The production application now uses a simplified 3-FACTOR model implemented in
+src/data_processor.py with data from data/reference/materials_verified.csv.
+
+CURRENT 3-FACTOR MODEL (see data_processor.py):
+1. Supply Risk (40%) — Import reliance + producer concentration (USGS MCS 2024)
+2. Strategic Alignment (40%) — DOE criticality category (DOE 2023)
+3. Production Feasibility (20%) — Whether US production exists (USGS MCS 2024)
+
+DEPRECATED 5-factor functions below are retained for reference but NOT USED:
+- calculate_market_opportunity_score() — removed (unverified market data)
+- calculate_kc_advantage_score() — removed (regional specificity not needed)
 
 All scores are normalized to 1-10 scale.
 """
