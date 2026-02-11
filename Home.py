@@ -141,8 +141,9 @@ st.markdown("""
 **Which critical materials should the US prioritize for domestic production?**
 
 This tool answers that question using verified government data (USGS, DOE).
-Materials are scored on **supply risk**, **strategic importance**, and **production feasibility**,
-then ranked to identify priorities. Every number is traceable to source documents.
+Materials are scored on **supply risk**, **strategic importance**, and **production feasibility**.
+The resulting ranking shows which materials deserve focus first for domestic production investment.
+Every number is traceable to source documents.
 """)
 
 # Tour button below value proposition
