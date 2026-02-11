@@ -155,11 +155,8 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Tour section
-col_tour, col_spacer = st.columns([1, 3])
-with col_tour:
-    render_tour_button()
-with col_spacer:
-    st.markdown("<p style='color: #666; margin-top: 0.5rem;'>New here? Learn how the tool works</p>", unsafe_allow_html=True)
+render_tour_button()
+st.caption("New here? Take a guided tour to learn how the tool works")
 
 st.markdown("---")
 
