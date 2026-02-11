@@ -66,15 +66,68 @@ MATERIAL_COLORS = {
 df = load_materials_data()
 
 if df is not None:
+    # Expandable explanation section
+    with st.expander("📖 **What is this page for?** Click to learn more", expanded=False):
+        st.markdown("""
+        ## Why Uncertainty Analysis Matters
+
+        Our rankings show Rare Earths as #1 and Gallium as #2. But **how confident should you be** in these rankings?
+
+        Real-world data isn't perfect:
+        - Import reliance figures are estimates that could be off by 5-10%
+        - DOE assessments may change as conditions evolve
+        - Some materials have scores very close together
+
+        **The key question:** If the underlying data shifted slightly, would the rankings change?
+
+        ---
+
+        ## What is Monte Carlo Simulation?
+
+        Instead of calculating rankings once, Monte Carlo simulation:
+
+        1. **Runs thousands of "what-if" scenarios** (e.g., 1,000 times)
+        2. **Each time, it slightly randomizes the scores** within the uncertainty ranges you set
+        3. **Recalculates the rankings** for each scenario
+        4. **Counts how often each material finishes #1, #2, etc.**
+
+        ---
+
+        ## How to Interpret Results
+
+        | If a material is #1 in... | Confidence Level | What it means |
+        |---------------------------|------------------|---------------|
+        | **>80% of simulations** | High | Very robust ranking — unlikely to change |
+        | **50-80% of simulations** | Medium | Reasonably confident, but close competitors |
+        | **<50% of simulations** | Low | Close call — small data changes could flip rankings |
+
+        ---
+
+        ## Practical Example
+
+        - **Rare Earths (8.84)** vs **Gallium (8.76)** — only 0.08 points apart
+          - Monte Carlo might show they swap places in 15% of scenarios
+          - This tells you: "These two are essentially tied for priority"
+
+        - **Rare Earths (8.84)** vs **Copper (5.36)** — 3.48 points apart
+          - Monte Carlo will show Copper never beats Rare Earths
+          - This tells you: "Rare Earths is definitively higher priority than Copper"
+
+        ---
+
+        ## When to Use This
+
+        - **Before making investment decisions** — Know which rankings are "sure things" vs "close calls"
+        - **When presenting to stakeholders** — Show confidence intervals, not just point estimates
+        - **When data quality is uncertain** — Test how sensitive rankings are to data errors
+        """)
+
     st.markdown("""
-    ### How It Works
+    ### Quick Summary
 
-    Real-world data has uncertainty. Import reliance estimates might be ±5%, price forecasts ±20%.
-    Monte Carlo simulation runs thousands of scenarios with randomized inputs to show:
-
-    - **Ranking confidence** — How often does each material rank #1, #2, etc.?
-    - **Score distributions** — What's the range of possible composite scores?
-    - **Sensitivity** — Which uncertainties matter most?
+    This page tests **how robust your rankings are**. It runs thousands of scenarios with slightly
+    randomized scores to see how often each material maintains its rank. High confidence (>80%)
+    means the ranking is solid. Low confidence (<50%) means it's a close call.
     """)
 
     st.markdown("---")
@@ -82,61 +135,53 @@ if df is not None:
     # Sidebar controls
     st.sidebar.header("Simulation Settings")
 
+    st.sidebar.markdown("**Step 1: Choose simulation count**")
     n_simulations = st.sidebar.slider(
         "Number of simulations",
         min_value=100,
         max_value=5000,
         value=1000,
         step=100,
-        help="More simulations = more accurate but slower"
+        help="More simulations = more accurate results. 1,000 is a good balance."
     )
 
     st.sidebar.markdown("---")
-    st.sidebar.subheader("Uncertainty Ranges (±%)")
+    st.sidebar.markdown("**Step 2: Set uncertainty ranges**")
+    st.sidebar.caption("How much could each score realistically vary? Higher = more uncertainty.")
 
-    uncertainty_import = st.sidebar.slider(
-        "Import Reliance",
+    uncertainty_supply = st.sidebar.slider(
+        "Supply Risk (±%)",
         min_value=0,
         max_value=30,
         value=10,
-        help="How much import reliance estimates might vary"
+        help="Example: ±10% means a score of 8.0 could range from 7.2 to 8.8"
     )
 
-    uncertainty_price = st.sidebar.slider(
-        "Price Change",
+    uncertainty_strategic = st.sidebar.slider(
+        "Strategic Alignment (±%)",
         min_value=0,
-        max_value=50,
-        value=25,
-        help="How much price forecasts might vary"
+        max_value=30,
+        value=10,
+        help="DOE categories are fairly stable, so 10% is reasonable"
     )
 
-    uncertainty_demand = st.sidebar.slider(
-        "Demand Growth",
-        min_value=0,
-        max_value=50,
-        value=20,
-        help="How much demand projections might vary"
-    )
-
-    uncertainty_scores = st.sidebar.slider(
-        "Factor Scores",
+    uncertainty_feasibility = st.sidebar.slider(
+        "Production Feasibility (±%)",
         min_value=0,
         max_value=30,
         value=15,
-        help="How much subjective scores (KC advantage, feasibility) might vary"
+        help="Binary (yes/no) converted to scores, so moderate uncertainty"
     )
 
-    # Weights
+    # Weights (3-factor model)
     st.sidebar.markdown("---")
-    st.sidebar.subheader("Scoring Weights")
+    st.sidebar.subheader("Scoring Weights (3-Factor Model)")
 
-    w_supply = st.sidebar.number_input("Supply Risk %", 0, 100, 25)
-    w_market = st.sidebar.number_input("Market Opportunity %", 0, 100, 20)
-    w_kc = st.sidebar.number_input("KC Advantage %", 0, 100, 15)
+    w_supply = st.sidebar.number_input("Supply Risk %", 0, 100, 40)
+    w_strategic = st.sidebar.number_input("Strategic Alignment %", 0, 100, 40)
     w_feasibility = st.sidebar.number_input("Production Feasibility %", 0, 100, 20)
-    w_strategic = st.sidebar.number_input("Strategic Alignment %", 0, 100, 20)
 
-    total_weight = w_supply + w_market + w_kc + w_feasibility + w_strategic
+    total_weight = w_supply + w_strategic + w_feasibility
 
     if total_weight != 100:
         st.sidebar.error(f"Weights must sum to 100% (currently {total_weight}%)")
@@ -167,25 +212,19 @@ if df is not None:
                         noise = np.random.normal(0, uncertainty_pct / 100 * value)
                         return np.clip(value + noise, min_val, max_val)
 
-                    # Perturb factor scores
+                    # Perturb factor scores (3-factor model)
                     sim_df['supply_risk_score'] = sim_df['supply_risk_score'].apply(
-                        lambda x: add_noise(x, uncertainty_import))
-                    sim_df['market_opportunity_score'] = sim_df['market_opportunity_score'].apply(
-                        lambda x: add_noise(x, uncertainty_price))
-                    sim_df['kc_advantage_score'] = sim_df['kc_advantage_score'].apply(
-                        lambda x: add_noise(x, uncertainty_scores))
-                    sim_df['production_feasibility_score'] = sim_df['production_feasibility_score'].apply(
-                        lambda x: add_noise(x, uncertainty_scores))
+                        lambda x: add_noise(x, uncertainty_supply))
                     sim_df['strategic_alignment_score'] = sim_df['strategic_alignment_score'].apply(
-                        lambda x: add_noise(x, uncertainty_scores))
+                        lambda x: add_noise(x, uncertainty_strategic))
+                    sim_df['production_feasibility_score'] = sim_df['production_feasibility_score'].apply(
+                        lambda x: add_noise(x, uncertainty_feasibility))
 
-                    # Calculate composite scores
+                    # Calculate composite scores (3-factor model)
                     sim_df['sim_composite'] = (
                         sim_df['supply_risk_score'] * (w_supply / 100) +
-                        sim_df['market_opportunity_score'] * (w_market / 100) +
-                        sim_df['kc_advantage_score'] * (w_kc / 100) +
-                        sim_df['production_feasibility_score'] * (w_feasibility / 100) +
-                        sim_df['strategic_alignment_score'] * (w_strategic / 100)
+                        sim_df['strategic_alignment_score'] * (w_strategic / 100) +
+                        sim_df['production_feasibility_score'] * (w_feasibility / 100)
                     )
 
                     # Record rankings

@@ -1,0 +1,14 @@
+material,import_reliance_pct,import_reliance_source,top_producer,top_producer_share_pct,top_producer_source,us_production_exists,us_production_source
+Lithium,>25,USGS MCS 2024,Australia,47,USGS MCS 2024,True,USGS MCS 2024
+Cobalt,67,USGS MCS 2024,DRC,74,USGS MCS 2024,False,USGS MCS 2024
+Nickel,49,USGS MCS 2024,Indonesia,49,USGS MCS 2024,True,USGS MCS 2024
+Graphite,100,USGS MCS 2024,China,77,USGS MCS 2024,False,USGS MCS 2024
+Manganese,100,USGS MCS 2024,South Africa,37,USGS MCS 2024,False,USGS MCS 2024
+Rare Earths,>95,USGS MCS 2024,China,70,USGS MCS 2024,True,USGS MCS 2024
+Copper,46,USGS MCS 2024,Chile,27,USGS MCS 2024,True,USGS MCS 2024
+Platinum Group,83,USGS MCS 2024,South Africa,72,USGS MCS 2024,True,USGS MCS 2024
+Gallium,100,USGS MCS 2024,China,98,USGS MCS 2024,False,USGS MCS 2024
+Vanadium,58,USGS MCS 2024,China,67,USGS MCS 2024,False,USGS MCS 2024
+Tin,74,USGS MCS 2024,China,31,USGS MCS 2024,False,USGS MCS 2024
+Tungsten,>50,USGS MCS 2024,China,82,USGS MCS 2024,True,USGS MCS 2024
+Zinc,77,USGS MCS 2024,China,33,USGS MCS 2024,True,USGS MCS 2024

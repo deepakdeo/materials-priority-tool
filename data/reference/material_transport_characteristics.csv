@@ -1,0 +1,14 @@
+material,bulk_commodity,typical_form,transport_mode_preference,primary_end_use_region,notes
+Lithium,No,Refined compounds (carbonate/hydroxide),Truck/Rail,Midwest/Southeast (battery plants),High value-to-weight ratio; battery plants in MI/OH/TN/GA
+Cobalt,No,Refined metal/compounds,Truck/Rail,Midwest/Southeast (battery plants),Processed form; battery cathode manufacturing
+Nickel,Yes,Ore/Matte/Refined metal,Rail/Barge,Midwest (steel) + Southeast (battery),Dual use: stainless steel and batteries
+Graphite,Yes,Ore/Processed flake,Rail/Barge,Midwest/Southeast (battery plants),Heavy bulk material; battery anode manufacturing
+Rare Earths,No,Separated oxides,Truck/Rail,Dispersed (magnets/electronics),Low volume; specialized processing
+Manganese,Yes,Ore/Ferroalloy,Rail/Barge,Midwest (steel) + Southeast (battery),Heavy bulk; steel industry + battery cathodes
+Copper,Yes,Ore/Concentrate/Refined,Rail/Barge,National (grid/construction),Ubiquitous demand; wire and cable
+Platinum Group,No,Refined metal,Truck/Air,Dispersed (catalysts/fuel cells),Very high value; low volume
+Gallium,No,Refined metal,Truck/Air,Dispersed (semiconductors),Extremely low volume; specialized
+Vanadium,No,Ferrovanadium/Oxides,Truck/Rail,Dispersed (steel/grid storage),Specialty steel and emerging battery tech
+Tin,No,Refined metal/Solder,Truck/Rail,National (electronics),Electronics manufacturing supply chain
+Tungsten,No,Concentrate/Powder,Truck/Rail,Dispersed (defense/tooling),Defense and industrial tooling
+Zinc,Yes,Ore/Refined metal,Rail/Barge,National (galvanizing),Heavy bulk; construction steel coating

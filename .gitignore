@@ -58,3 +58,9 @@ data/raw/doe/*.pdf
 
 # Streamlit
 .streamlit/secrets.toml
+.build_journal.md
+
+# Source PDF documents (too large for git)
+data/raw/usgs/*.pdf
+data/raw/doe/*.pdf
+data/raw/sources/

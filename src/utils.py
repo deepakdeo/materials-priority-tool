@@ -220,10 +220,10 @@ def generate_pdf_report(df: pd.DataFrame, title: str = "Materials Priority Repor
     pdf.cell(0, 10, "Priority Rankings", ln=True)
     pdf.ln(2)
 
-    # Rankings table
+    # Rankings table (3-factor model)
     pdf.set_font("Helvetica", "B", 9)
-    col_widths = [15, 35, 25, 25, 25, 30, 35]
-    headers = ["Rank", "Material", "Score", "Supply Risk", "Market Opp.", "KC Advantage", "Criticality"]
+    col_widths = [15, 40, 25, 30, 30, 30, 35]
+    headers = ["Rank", "Material", "Score", "Supply Risk", "Strategic", "Feasibility", "DOE Category"]
 
     for i, header in enumerate(headers):
         pdf.cell(col_widths[i], 8, header, border=1, align="C")
@@ -235,9 +235,9 @@ def generate_pdf_report(df: pd.DataFrame, title: str = "Materials Priority Repor
         pdf.cell(col_widths[1], 8, str(row.get('material', '')), border=1)
         pdf.cell(col_widths[2], 8, f"{row.get('composite_score', 0):.2f}", border=1, align="C")
         pdf.cell(col_widths[3], 8, f"{row.get('supply_risk_score', 0):.1f}", border=1, align="C")
-        pdf.cell(col_widths[4], 8, f"{row.get('market_opportunity_score', 0):.1f}", border=1, align="C")
-        pdf.cell(col_widths[5], 8, f"{row.get('kc_advantage_score', 0):.1f}", border=1, align="C")
-        pdf.cell(col_widths[6], 8, str(row.get('criticality_category', '')), border=1, align="C")
+        pdf.cell(col_widths[4], 8, f"{row.get('strategic_alignment_score', 0):.1f}", border=1, align="C")
+        pdf.cell(col_widths[5], 8, f"{row.get('production_feasibility_score', 0):.1f}", border=1, align="C")
+        pdf.cell(col_widths[6], 8, str(row.get('short_term_category', '')), border=1, align="C")
         pdf.ln()
 
     pdf.ln(10)
@@ -254,12 +254,12 @@ def generate_pdf_report(df: pd.DataFrame, title: str = "Materials Priority Repor
         pdf.ln(2)
 
     # Count critical materials
-    critical_count = len(df[df['criticality_category'] == 'Critical']) if 'criticality_category' in df.columns else 0
+    critical_count = len(df[df['short_term_category'] == 'Critical']) if 'short_term_category' in df.columns else 0
     pdf.multi_cell(0, 6, f"2. {critical_count} materials rated as 'Critical' by DOE assessment")
     pdf.ln(2)
 
-    # High import reliance
-    high_import = df[df['import_reliance_pct'] >= 75] if 'import_reliance_pct' in df.columns else pd.DataFrame()
+    # High import reliance (use numeric column)
+    high_import = df[df['import_reliance_numeric'] >= 75] if 'import_reliance_numeric' in df.columns else pd.DataFrame()
     if len(high_import) > 0:
         materials_list = ", ".join(high_import['material'].tolist())
         pdf.multi_cell(0, 6, f"3. High import reliance (>=75%): {materials_list}")
@@ -268,6 +268,23 @@ def generate_pdf_report(df: pd.DataFrame, title: str = "Materials Priority Repor
 
     # Footer
     pdf.set_font("Helvetica", "I", 8)
-    pdf.cell(0, 10, "Data sources: USGS Mineral Commodity Summaries, DOE Critical Materials Assessment", ln=True)
+    pdf.cell(0, 10, "Data sources: USGS MCS 2024, DOE Critical Materials Assessment 2023", ln=True)
 
-    return bytes(pdf.output())
+    # Handle different fpdf versions
+    # fpdf (original): output(dest='S') returns string
+    # fpdf2: output() returns bytes or bytearray
+    try:
+        # Try fpdf original style with dest='S' to get string
+        output = pdf.output(dest='S')
+        if isinstance(output, bytes):
+            return output
+        elif isinstance(output, str):
+            return output.encode('latin-1')
+        else:
+            return bytes(output)
+    except (TypeError, AttributeError):
+        # Try fpdf2 style
+        output = pdf.output()
+        if isinstance(output, (bytes, bytearray)):
+            return bytes(output)
+        return output.encode('latin-1')

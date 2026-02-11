@@ -29,7 +29,15 @@ MATERIALS_LIST = [
 ]
 
 # Default scoring weights (must sum to 1.0)
+# Simplified 3-factor model using only verified data
 DEFAULT_WEIGHTS = {
+    "supply_risk": 0.40,
+    "strategic_alignment": 0.40,
+    "production_feasibility": 0.20,
+}
+
+# Legacy 5-factor weights (deprecated - includes unverified data)
+LEGACY_WEIGHTS = {
     "supply_risk": 0.25,
     "market_opportunity": 0.20,
     "kc_advantage": 0.15,

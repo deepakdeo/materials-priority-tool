@@ -81,11 +81,13 @@ if df is not None:
         with col3:
             st.metric("Primary Use", row.get("primary_use", "N/A"))
         with col4:
-            category = row["criticality_category"]
+            category = row.get("short_term_category", "Not-Evaluated")
             if category == "Critical":
                 st.error(f"🔴 {category}")
             elif category == "Near-Critical":
                 st.warning(f"🟠 {category}")
+            elif category == "Not-Evaluated":
+                st.info(f"⚪ {category}")
             else:
                 st.success(f"🟢 {category}")
 
@@ -94,14 +96,12 @@ if df is not None:
         # Score Overview
         st.subheader("Score Overview")
 
-        score_cols = st.columns(6)
+        score_cols = st.columns(4)
         scores = [
-            ("Composite", row['composite_score'], None),
-            ("Supply Risk", row['supply_risk_score'], "Higher = more risk"),
-            ("Market Opp.", row['market_opportunity_score'], "Higher = better opportunity"),
-            ("KC Advantage", row['kc_advantage_score'], "Higher = better fit"),
-            ("Feasibility", row['production_feasibility_score'], "Higher = more feasible"),
-            ("Strategic", row['strategic_alignment_score'], "Higher = better alignment"),
+            ("Composite", row['composite_score'], "Weighted average of all factors"),
+            ("Supply Risk", row['supply_risk_score'], "Import reliance + producer concentration (40%)"),
+            ("Strategic", row['strategic_alignment_score'], "DOE criticality category (40%)"),
+            ("Feasibility", row['production_feasibility_score'], "US production exists (20%)"),
         ]
 
         for i, (name, score, help_text) in enumerate(scores):
@@ -117,17 +117,23 @@ if df is not None:
             # Supply Chain Overview
             st.subheader("Supply Chain Overview")
 
-            st.metric("Import Reliance", f"{row['import_reliance_pct']}%")
+            # Handle import reliance as string (e.g., ">25")
+            import_reliance_display = str(row['import_reliance_pct'])
+            if not import_reliance_display.startswith('>') and not import_reliance_display.startswith('<'):
+                import_reliance_display = f"{import_reliance_display}%"
+
+            st.metric("Import Reliance", import_reliance_display)
             st.metric("Top Producer", f"{row['top_producer']}")
             st.metric("Top Producer Share", f"{row['top_producer_share_pct']}%")
 
             production_status = "✅ Yes" if row["us_production_exists"] else "❌ No"
             st.metric("U.S. Production Exists", production_status)
 
-            # Import reliance gauge
+            # Import reliance gauge - use numeric value
+            import_numeric = row.get('import_reliance_numeric', 50)
             fig_gauge = go.Figure(go.Indicator(
                 mode="gauge+number",
-                value=row['import_reliance_pct'],
+                value=import_numeric,
                 domain={'x': [0, 1], 'y': [0, 1]},
                 title={'text': "Import Reliance %"},
                 gauge={
@@ -145,25 +151,15 @@ if df is not None:
             st.plotly_chart(fig_gauge, use_container_width=True)
 
         with right_col:
-            # Market Data
-            st.subheader("Market Data")
+            # Score Breakdown
+            st.subheader("Score Profile")
 
-            st.metric("Price (2024)", f"${row['price_2024_usd']:,.0f}/{row['price_unit']}")
-
-            delta_color = "normal" if row["5yr_price_change_pct"] >= 0 else "inverse"
-            st.metric("5-Year Price Change", f"{row['5yr_price_change_pct']:+.0f}%")
-
-            st.metric("Demand Growth", f"{row['demand_growth_pct']}%/year")
-            st.metric("Market Size", f"${row['market_size_bn']}B")
-
-            # Radar chart for this material
-            categories = ['Supply Risk', 'Market Opp.', 'KC Advantage', 'Feasibility', 'Strategic']
+            # Radar chart for this material - 3-factor model
+            categories = ['Supply Risk', 'Strategic Alignment', 'Production Feasibility']
             score_values = [
                 row['supply_risk_score'],
-                row['market_opportunity_score'],
-                row['kc_advantage_score'],
-                row['production_feasibility_score'],
                 row['strategic_alignment_score'],
+                row['production_feasibility_score'],
             ]
             score_values.append(score_values[0])
 
@@ -183,58 +179,49 @@ if df is not None:
             )
             st.plotly_chart(fig_radar, use_container_width=True)
 
+            # Score breakdown table
+            st.markdown("**Score Breakdown:**")
+            st.write(f"- Supply Risk: {row['supply_risk_score']:.1f}/10 (40% weight)")
+            st.write(f"- Strategic Alignment: {row['strategic_alignment_score']:.1f}/10 (40% weight)")
+            st.write(f"- Production Feasibility: {row['production_feasibility_score']:.1f}/10 (20% weight)")
+
         st.markdown("---")
 
         # DOE Assessment
-        st.subheader("DOE Critical Materials Assessment")
+        st.subheader("DOE Critical Materials Assessment (2023)")
 
         col1, col2 = st.columns(2)
 
         with col1:
-            st.markdown("**Short-term (2023-2027)**")
-            st.write(f"- Importance to Energy: {row['importance_short']}/4")
-            st.write(f"- Supply Risk: {row['risk_short']}/4")
+            st.markdown("**Short-term (2020-2025)**")
+            short_cat = row.get('short_term_category', 'Not-Evaluated')
+            if short_cat == "Critical":
+                st.error(f"🔴 {short_cat}")
+            elif short_cat == "Near-Critical":
+                st.warning(f"🟠 {short_cat}")
+            elif short_cat == "Not-Evaluated":
+                st.info(f"⚪ {short_cat}")
+            else:
+                st.success(f"🟢 {short_cat}")
 
         with col2:
-            st.markdown("**Medium-term (2028-2035)**")
-            st.write(f"- Importance to Energy: {row['importance_medium']}/4")
-            st.write(f"- Supply Risk: {row['risk_medium']}/4")
+            st.markdown("**Medium-term (2025-2035)**")
+            med_cat = row.get('medium_term_category', 'Not-Evaluated')
+            if med_cat == "Critical":
+                st.error(f"🔴 {med_cat}")
+            elif med_cat == "Near-Critical":
+                st.warning(f"🟠 {med_cat}")
+            elif med_cat == "Not-Evaluated":
+                st.info(f"⚪ {med_cat}")
+            else:
+                st.success(f"🟢 {med_cat}")
 
-        st.markdown("---")
-
-        # KC Advantage
-        st.subheader("Kansas City Advantage Assessment")
-
-        col1, col2, col3 = st.columns(3)
-
-        with col1:
-            st.metric("Bulk Transport Benefit", f"{row['bulk_transport_benefit']}/10")
-
-        with col2:
-            st.metric("Central Location Benefit", f"{row['central_location_benefit']}/10")
-
-        with col3:
-            st.metric("Existing Infrastructure", f"{row['existing_infrastructure']}/10")
-
-        st.info(f"**Notes:** {row['kc_notes']}")
-
-        st.markdown("---")
-
-        # Production Feasibility
-        st.subheader("Production Feasibility")
-
-        col1, col2 = st.columns(2)
-
-        with col1:
-            st.metric("Technology Readiness", f"{row['technology_readiness']}/10")
-
-        with col2:
-            st.metric("Capital Intensity", f"{row['capex_intensity']}/10",
-                      help="Lower is better (easier to deploy)")
+        primary_use = row.get('primary_use', 'N/A')
+        st.caption(f"Primary Use: {primary_use}")
 
         # Data sources
         st.markdown("---")
-        st.caption("Data sources: USGS Mineral Commodity Summaries, DOE Critical Materials Assessment")
+        st.caption("Data sources: USGS Mineral Commodity Summaries 2024, DOE Critical Materials Assessment 2023")
 
 else:
     st.error("Processed data not found. Please run the data processor first.")

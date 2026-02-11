@@ -1,14 +1,14 @@
-material,import_reliance_pct,top_producer_share_pct,5yr_price_change_pct,demand_growth_pct,us_production_exists,technology_readiness,capex_intensity,importance_short,risk_short,supply_risk_score,market_opportunity_score,kc_advantage_score,production_feasibility_score,strategic_alignment_score,composite_score,rank
-Lithium,25,47,180,20,True,7,8,4,3,4.7,8.6,7.6,6.4,7.5,6.82,1
-Graphite,100,77,10,15,False,5,5,4,4,9.3,4.2,7.6,4.3,8.0,6.76,2
-Rare Earths,95,70,45,12,True,6,9,4,4,8.8,4.3,6.0,5.6,6.0,6.28,3
-Zinc,76,33,-5,5,True,9,4,3,3,6.8,2.0,8.5,8.6,5.0,6.1,4
-Manganese,100,37,5,5,False,7,4,3,2,8.1,2.1,7.9,5.6,6.5,6.05,5
-Nickel,56,49,-25,6,True,8,6,3,3,6.3,2.2,7.5,7.5,7.0,6.04,6
-Cobalt,76,74,-15,8,False,6,7,4,4,8.0,2.6,7.0,4.2,8.0,6.01,7
-Gallium,100,98,-10,18,False,4,6,4,4,9.9,4.6,4.6,3.5,6.0,5.98,8
-Vanadium,94,67,35,15,False,5,7,3,3,8.7,4.7,6.6,3.7,5.0,5.84,9
-Tungsten,50,82,40,8,True,7,7,4,4,7.0,3.4,5.8,6.7,6.0,5.84,9
-Platinum Group,80,72,25,10,False,6,8,4,4,8.2,3.5,5.6,3.9,6.0,5.57,11
-Copper,35,27,15,8,True,9,7,4,2,4.6,2.9,8.1,7.7,5.0,5.48,12
-Tin,75,31,10,6,False,8,5,3,2,6.7,2.4,6.8,5.8,4.5,5.24,13
+material,import_reliance_pct,import_reliance_numeric,top_producer,top_producer_share_pct,us_production_exists,short_term_category,medium_term_category,primary_use,supply_risk_score,strategic_alignment_score,production_feasibility_score,composite_score,rank
+Rare Earths,>95,95.0,China,70,True,Critical,Critical,Magnet,8.6,10.0,7.0,8.84,1
+Gallium,100,100.0,China,98,False,Critical,Critical,Semiconductor,9.9,10.0,4.0,8.76,2
+Graphite,100,100.0,China,77,False,Critical,Critical,Battery,9.1,10.0,4.0,8.44,3
+Platinum Group,83,83.0,South Africa,72,True,Near-Critical,Critical,Fuel Cell,8.0,8.5,7.0,8.0,4
+Cobalt,67,67.0,DRC,74,False,Critical,Critical,Battery,7.3,10.0,4.0,7.72,5
+Nickel,49,49.0,Indonesia,49,True,Near-Critical,Critical,Battery,5.4,8.5,7.0,6.96,6
+Lithium,>25,25.0,Australia,47,True,Near-Critical,Critical,Battery,4.1,8.5,7.0,6.44,7
+Tungsten,>50,50.0,China,82,True,Not-Evaluated,Not-Evaluated,Defense,6.8,5.0,7.0,6.12,8
+Zinc,77,77.0,China,33,True,Not-Evaluated,Not-Evaluated,Galvanizing,6.2,5.0,7.0,5.88,9
+Manganese,100,100.0,South Africa,37,False,Not-Evaluated,Not-Evaluated,Battery,7.5,5.0,4.0,5.8,10
+Vanadium,58,58.0,China,67,False,Not-Evaluated,Not-Evaluated,Grid Storage,6.6,5.0,4.0,5.44,11
+Copper,46,46.0,Chile,27,True,Not-Critical,Near-Critical,EV/Grid,4.4,5.5,7.0,5.36,12
+Tin,74,74.0,China,31,False,Not-Evaluated,Not-Evaluated,Electronics,5.9,5.0,4.0,5.16,13

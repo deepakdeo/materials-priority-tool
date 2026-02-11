@@ -30,7 +30,7 @@ apply_theme_css()
 render_tour_widget()
 
 st.title("📊 Priority Rankings")
-st.markdown("Composite scores and rankings for critical materials based on 5-factor analysis.")
+st.markdown("Composite scores and rankings for critical materials based on verified 3-factor analysis.")
 
 # Data paths
 DATA_DIR = Path(__file__).parent.parent / "data"
@@ -75,19 +75,16 @@ if df is not None:
 
     display_cols = [
         "rank", "material", "primary_use", "composite_score",
-        "supply_risk_score", "market_opportunity_score", "kc_advantage_score",
-        "production_feasibility_score", "strategic_alignment_score",
-        "criticality_category"
+        "supply_risk_score", "strategic_alignment_score",
+        "production_feasibility_score", "short_term_category"
     ]
 
     st.dataframe(
         df[display_cols].style.format({
             "composite_score": "{:.2f}",
             "supply_risk_score": "{:.1f}",
-            "market_opportunity_score": "{:.1f}",
-            "kc_advantage_score": "{:.1f}",
-            "production_feasibility_score": "{:.1f}",
             "strategic_alignment_score": "{:.1f}",
+            "production_feasibility_score": "{:.1f}",
         }).background_gradient(subset=['composite_score'], cmap='RdYlGn'),
         width="stretch",
         hide_index=True,
@@ -116,13 +113,16 @@ if df is not None:
         )
 
     with export_cols[2]:
-        pdf_data = generate_pdf_report(df)
-        st.download_button(
-            label="📑 Download PDF Report",
-            data=pdf_data,
-            file_name="materials_priority_report.pdf",
-            mime="application/pdf",
-        )
+        try:
+            pdf_data = generate_pdf_report(df)
+            st.download_button(
+                label="📑 Download PDF Report",
+                data=pdf_data,
+                file_name="materials_priority_report.pdf",
+                mime="application/pdf",
+            )
+        except ImportError:
+            st.button("📑 PDF (install fpdf)", disabled=True, help="Run: pip install fpdf")
 
     st.markdown("---")
 
@@ -160,12 +160,10 @@ if df is not None:
         st.subheader("Top 3 Materials Comparison")
 
         categories = [
-            'Supply Risk', 'Market Opportunity', 'KC Advantage',
-            'Production Feasibility', 'Strategic Alignment'
+            'Supply Risk', 'Strategic Alignment', 'Production Feasibility'
         ]
         score_cols = [
-            'supply_risk_score', 'market_opportunity_score', 'kc_advantage_score',
-            'production_feasibility_score', 'strategic_alignment_score'
+            'supply_risk_score', 'strategic_alignment_score', 'production_feasibility_score'
         ]
 
         fig_radar = go.Figure()
@@ -203,10 +201,10 @@ if df is not None:
             st.metric(
                 label=f"#{int(row['rank'])} {row['material']}",
                 value=f"{row['composite_score']:.2f}",
-                delta=row["criticality_category"],
+                delta=row["short_term_category"],
             )
             st.caption(f"Top producer: {row['top_producer']} ({row['top_producer_share_pct']}%)")
-            st.caption(f"Import reliance: {row['import_reliance_pct']}%")
+            st.caption(f"Import reliance: {row['import_reliance_pct']}")
 
     st.markdown("---")
 
@@ -214,26 +212,23 @@ if df is not None:
     st.subheader("Score Breakdown by Factor")
     st.caption("Contribution of each factor to composite score (weighted)")
 
-    # Calculate weighted contributions
-    weights = {"Supply Risk": 0.25, "Market Opp.": 0.20, "KC Advantage": 0.15,
-               "Feasibility": 0.20, "Strategic": 0.20}
+    # Calculate weighted contributions - 3-factor model
+    weights = {"Supply Risk": 0.40, "Strategic": 0.40, "Feasibility": 0.20}
 
     breakdown_data = []
     for _, row in df.iterrows():
         breakdown_data.append({
             "Material": row["material"],
             "Supply Risk": row["supply_risk_score"] * weights["Supply Risk"],
-            "Market Opp.": row["market_opportunity_score"] * weights["Market Opp."],
-            "KC Advantage": row["kc_advantage_score"] * weights["KC Advantage"],
-            "Feasibility": row["production_feasibility_score"] * weights["Feasibility"],
             "Strategic": row["strategic_alignment_score"] * weights["Strategic"],
+            "Feasibility": row["production_feasibility_score"] * weights["Feasibility"],
         })
 
     breakdown_df = pd.DataFrame(breakdown_data)
     breakdown_df = breakdown_df.set_index("Material")
 
     fig_stacked = go.Figure()
-    colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd"]
+    colors = ["#1f77b4", "#9467bd", "#2ca02c"]
     for i, col in enumerate(breakdown_df.columns):
         fig_stacked.add_trace(go.Bar(
             name=col,
@@ -299,7 +294,8 @@ if df is not None:
 
     # Data timestamp
     st.markdown("---")
-    st.caption("Data sources: USGS Mineral Commodity Summaries, DOE Critical Materials Assessment, World Bank")
+    st.caption("Data sources: USGS Mineral Commodity Summaries 2024, DOE Critical Materials Assessment 2023")
+    st.caption("Scoring: Supply Risk (40%) + Strategic Alignment (40%) + Production Feasibility (20%)")
 
 else:
     st.error("Processed data not found. Please run the data processor first.")

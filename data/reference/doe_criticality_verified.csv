@@ -1,0 +1,14 @@
+material,short_term_category,medium_term_category,primary_use,source
+Lithium,Near-Critical,Critical,Battery,DOE Critical Materials Assessment 2023
+Cobalt,Critical,Critical,Battery,DOE Critical Materials Assessment 2023
+Nickel,Near-Critical,Critical,Battery,DOE Critical Materials Assessment 2023
+Graphite,Critical,Critical,Battery,DOE Critical Materials Assessment 2023
+Manganese,Not-Evaluated,Not-Evaluated,Battery,Not in DOE 2023 top 23 evaluated materials
+Rare Earths,Critical,Critical,Magnet,DOE Critical Materials Assessment 2023 (Neodymium/Dysprosium)
+Copper,Not-Critical,Near-Critical,EV/Grid,DOE Critical Materials Assessment 2023
+Platinum Group,Near-Critical,Critical,Fuel Cell,DOE Critical Materials Assessment 2023
+Gallium,Critical,Critical,Semiconductor,DOE Critical Materials Assessment 2023
+Vanadium,Not-Evaluated,Not-Evaluated,Grid Storage,Not in DOE 2023 top 23 evaluated materials
+Tin,Not-Evaluated,Not-Evaluated,Electronics,Not in DOE 2023 top 23 evaluated materials
+Tungsten,Not-Evaluated,Not-Evaluated,Defense,Not in DOE 2023 top 23 evaluated materials
+Zinc,Not-Evaluated,Not-Evaluated,Galvanizing,Not in DOE 2023 top 23 evaluated materials

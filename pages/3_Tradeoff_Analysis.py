@@ -80,41 +80,36 @@ if df is not None:
 
     preset = st.sidebar.selectbox(
         "Load preset:",
-        ["Custom", "Default (Balanced)", "Supply Security Focus", "Market Opportunity Focus", "KC Advantage Focus"]
+        ["Custom", "Default (Balanced)", "Supply Security Focus", "Strategic Focus", "Feasibility Focus"]
     )
 
-    # Set default values based on preset or loaded scenario
+    # Set default values based on preset or loaded scenario (3-factor model)
     if "load_weights" in st.session_state:
         lw = st.session_state.pop("load_weights")
         default_weights = (
-            lw["supply_risk"], lw["market_opportunity"], lw["kc_advantage"],
-            lw["production_feasibility"], lw["strategic_alignment"]
+            lw["supply_risk"], lw["strategic_alignment"], lw["production_feasibility"]
         )
     elif preset == "Default (Balanced)":
-        default_weights = (25, 20, 15, 20, 20)
+        default_weights = (40, 40, 20)
     elif preset == "Supply Security Focus":
-        default_weights = (40, 10, 10, 15, 25)
-    elif preset == "Market Opportunity Focus":
-        default_weights = (15, 35, 10, 25, 15)
-    elif preset == "KC Advantage Focus":
-        default_weights = (15, 15, 35, 20, 15)
+        default_weights = (60, 25, 15)
+    elif preset == "Strategic Focus":
+        default_weights = (25, 60, 15)
+    elif preset == "Feasibility Focus":
+        default_weights = (30, 30, 40)
     else:
-        default_weights = (25, 20, 15, 20, 20)
+        default_weights = (40, 40, 20)
 
     st.sidebar.markdown("---")
 
-    w_supply = st.sidebar.slider("Supply Risk", 0, 50, default_weights[0], 5,
-                                  help="Import dependency & concentration")
-    w_market = st.sidebar.slider("Market Opportunity", 0, 50, default_weights[1], 5,
-                                  help="Price trends & demand growth")
-    w_kc = st.sidebar.slider("KC Advantage", 0, 50, default_weights[2], 5,
-                              help="Kansas City logistics benefits")
-    w_feasibility = st.sidebar.slider("Production Feasibility", 0, 50, default_weights[3], 5,
-                                       help="Domestic production readiness")
-    w_strategic = st.sidebar.slider("Strategic Alignment", 0, 50, default_weights[4], 5,
-                                     help="DOE & national priorities")
+    w_supply = st.sidebar.slider("Supply Risk", 0, 80, default_weights[0], 5,
+                                  help="Import reliance + producer concentration")
+    w_strategic = st.sidebar.slider("Strategic Alignment", 0, 80, default_weights[1], 5,
+                                     help="DOE criticality categories")
+    w_feasibility = st.sidebar.slider("Production Feasibility", 0, 80, default_weights[2], 5,
+                                       help="US production exists")
 
-    total_weight = w_supply + w_market + w_kc + w_feasibility + w_strategic
+    total_weight = w_supply + w_strategic + w_feasibility
 
     if total_weight != 100:
         st.sidebar.error(f"⚠️ Weights sum to {total_weight}%. Must equal 100%.")
@@ -132,10 +127,8 @@ if df is not None:
     if st.sidebar.button("💾 Save Current Scenario") and scenario_name:
         st.session_state.saved_scenarios[scenario_name] = {
             "supply_risk": w_supply,
-            "market_opportunity": w_market,
-            "kc_advantage": w_kc,
-            "production_feasibility": w_feasibility,
             "strategic_alignment": w_strategic,
+            "production_feasibility": w_feasibility,
             "saved_at": datetime.now().isoformat(),
         }
         st.sidebar.success(f"Saved: {scenario_name}")
@@ -172,24 +165,20 @@ if df is not None:
     # Show current weights
     st.subheader("Current Weight Configuration")
 
-    col1, col2, col3, col4, col5 = st.columns(5)
+    col1, col2, col3 = st.columns(3)
     col1.metric("Supply Risk", f"{w_supply}%")
-    col2.metric("Market Opp.", f"{w_market}%")
-    col3.metric("KC Advantage", f"{w_kc}%")
-    col4.metric("Feasibility", f"{w_feasibility}%")
-    col5.metric("Strategic", f"{w_strategic}%")
+    col2.metric("Strategic Alignment", f"{w_strategic}%")
+    col3.metric("Feasibility", f"{w_feasibility}%")
 
     st.markdown("---")
 
     if weights_valid:
-        # Recalculate composite scores with new weights
+        # Recalculate composite scores with new weights (3-factor model)
         df_calc = df.copy()
         df_calc['new_composite'] = (
             df_calc['supply_risk_score'] * (w_supply / 100) +
-            df_calc['market_opportunity_score'] * (w_market / 100) +
-            df_calc['kc_advantage_score'] * (w_kc / 100) +
-            df_calc['production_feasibility_score'] * (w_feasibility / 100) +
-            df_calc['strategic_alignment_score'] * (w_strategic / 100)
+            df_calc['strategic_alignment_score'] * (w_strategic / 100) +
+            df_calc['production_feasibility_score'] * (w_feasibility / 100)
         ).round(2)
 
         df_calc['new_rank'] = df_calc['new_composite'].rank(ascending=False, method='min').astype(int)
@@ -207,8 +196,8 @@ if df is not None:
 
             display_cols = [
                 "new_rank", "material", "new_composite",
-                "supply_risk_score", "market_opportunity_score", "kc_advantage_score",
-                "production_feasibility_score", "strategic_alignment_score", "rank_change"
+                "supply_risk_score", "strategic_alignment_score",
+                "production_feasibility_score", "rank_change"
             ]
 
             def format_rank_change(val):
@@ -225,10 +214,8 @@ if df is not None:
                 display_df.style.format({
                     "new_composite": "{:.2f}",
                     "supply_risk_score": "{:.1f}",
-                    "market_opportunity_score": "{:.1f}",
-                    "kc_advantage_score": "{:.1f}",
-                    "production_feasibility_score": "{:.1f}",
                     "strategic_alignment_score": "{:.1f}",
+                    "production_feasibility_score": "{:.1f}",
                 }),
                 width="stretch",
                 hide_index=True,
@@ -237,10 +224,8 @@ if df is not None:
                     "material": "Material",
                     "new_composite": "Score",
                     "supply_risk_score": "Supply",
-                    "market_opportunity_score": "Market",
-                    "kc_advantage_score": "KC",
-                    "production_feasibility_score": "Feasibility",
                     "strategic_alignment_score": "Strategic",
+                    "production_feasibility_score": "Feasibility",
                     "rank_change": "Change",
                 }
             )
@@ -298,10 +283,8 @@ if df is not None:
         runner_up_row = df_calc[df_calc['material'] == runner_up].iloc[0]
         top_row = df_calc[df_calc['material'] == current_top].iloc[0]
 
-        factors = ['supply_risk_score', 'market_opportunity_score', 'kc_advantage_score',
-                   'production_feasibility_score', 'strategic_alignment_score']
-        factor_names = ['Supply Risk', 'Market Opportunity', 'KC Advantage',
-                        'Production Feasibility', 'Strategic Alignment']
+        factors = ['supply_risk_score', 'strategic_alignment_score', 'production_feasibility_score']
+        factor_names = ['Supply Risk', 'Strategic Alignment', 'Production Feasibility']
 
         advantages = []
         for factor, name in zip(factors, factor_names):

@@ -20,7 +20,7 @@ from src.feedback import render_feedback_widget
 
 # Page configuration
 st.set_page_config(
-    page_title="Materials Priority Tool",
+    page_title="Home - Materials Priority Tool",
     page_icon="🔋",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -155,7 +155,7 @@ if df is not None:
         )
 
     with col2:
-        critical_count = len(df[df['criticality_category'] == 'Critical'])
+        critical_count = len(df[df['short_term_category'] == 'Critical'])
         st.metric(
             label="Critical Materials",
             value=critical_count,
@@ -163,7 +163,7 @@ if df is not None:
         )
 
     with col3:
-        high_import = len(df[df['import_reliance_pct'] >= 75])
+        high_import = len(df[df['import_reliance_numeric'] >= 75])
         st.metric(
             label="High Import Risk",
             value=f"{high_import}",
@@ -193,7 +193,7 @@ if df is not None:
             rank = int(row['rank'])
             material = row['material']
             score = row['composite_score']
-            category = row['criticality_category']
+            category = row.get('short_term_category', 'Not-Evaluated')
             primary_use = row.get('primary_use', 'N/A')
 
             # Badge color based on criticality
@@ -201,6 +201,8 @@ if df is not None:
                 badge = "🔴"
             elif category == "Near-Critical":
                 badge = "🟠"
+            elif category == "Not-Evaluated":
+                badge = "⚪"
             else:
                 badge = "🟢"
 
@@ -298,31 +300,30 @@ if df is not None:
     # Scoring Framework (collapsed by default)
     with st.expander("📐 **Scoring Framework** — How materials are evaluated", expanded=False):
         st.markdown("""
-        Materials are scored on **5 factors** (1-10 scale) with configurable weights:
+        Materials are scored on **3 factors** (1-10 scale) using only verified data:
 
-        | Factor | Default Weight | What It Measures |
-        |--------|----------------|------------------|
-        | **Supply Risk** | 25% | U.S. import dependency, geographic concentration |
-        | **Market Opportunity** | 20% | Price trends, demand growth projections |
-        | **KC Advantage** | 15% | Kansas City logistics benefits (rail, river, central location) |
-        | **Production Feasibility** | 20% | Domestic production technology readiness |
-        | **Strategic Alignment** | 20% | DOE criticality rating, battery/EV/defense relevance |
+        | Factor | Default Weight | What It Measures | Data Source |
+        |--------|----------------|------------------|-------------|
+        | **Supply Risk** | 40% | Import reliance + producer concentration | USGS MCS 2024 |
+        | **Strategic Alignment** | 40% | DOE criticality category | DOE 2023 Assessment |
+        | **Production Feasibility** | 20% | Whether US production exists | USGS MCS 2024 |
 
         The **composite score** is the weighted sum of individual factor scores.
+        All data is verified and traceable to government sources.
+
         Adjust weights in the Trade-off Analysis page to match your priorities.
         """)
 
     # Materials Grid (collapsed)
     with st.expander("📋 **All Materials** — Complete list with categories", expanded=False):
         display_df = df[['rank', 'material', 'primary_use', 'composite_score',
-                         'criticality_category', 'import_reliance_pct']].copy()
-        display_df.columns = ['Rank', 'Material', 'Primary Use', 'Score', 'DOE Category', 'Import %']
+                         'short_term_category', 'import_reliance_pct']].copy()
+        display_df.columns = ['Rank', 'Material', 'Primary Use', 'Score', 'DOE Category', 'Import Reliance']
         display_df = display_df.sort_values('Rank')
 
         st.dataframe(
             display_df.style.format({
                 'Score': '{:.2f}',
-                'Import %': '{:.0f}%'
             }),
             use_container_width=True,
             hide_index=True,
@@ -333,12 +334,11 @@ if df is not None:
         st.markdown("""
         | Source | Description | Link |
         |--------|-------------|------|
-        | **USGS Mineral Commodity Summaries 2024** | Production, imports, prices | [usgs.gov/mcs](https://www.usgs.gov/centers/national-minerals-information-center/mineral-commodity-summaries) |
-        | **DOE Critical Materials Assessment 2023** | Criticality ratings | [energy.gov/critical-materials](https://www.energy.gov/eere/vehicles/articles/2023-critical-materials-assessment) |
-        | **World Bank Pink Sheet** | Historical commodity prices | [worldbank.org/commodities](https://www.worldbank.org/en/research/commodity-markets) |
-        | **Bureau of Transportation Statistics** | KC logistics metrics | [bts.gov](https://www.bts.gov/) |
+        | **USGS Mineral Commodity Summaries 2024** | Import reliance, production, top producers | [usgs.gov/mcs](https://www.usgs.gov/centers/national-minerals-information-center/mineral-commodity-summaries) |
+        | **DOE Critical Materials Assessment 2023** | Criticality categories (Critical, Near-Critical, Not-Critical) | [energy.gov/critical-materials](https://www.energy.gov/eere/vehicles/articles/2023-critical-materials-assessment) |
+        | **World Bank Pink Sheet** | Historical commodity prices (limited coverage) | [worldbank.org/commodities](https://www.worldbank.org/en/research/commodity-markets) |
 
-        *Data was last updated: February 2024. See the [Data Refresh Guide](https://github.com/deepakdeo/materials-priority-tool/blob/main/docs/data_refresh_guide.md) for update instructions.*
+        *All data is verified and traceable to source documents. See DATA_SOURCES.md for complete provenance.*
         """)
 
 else:

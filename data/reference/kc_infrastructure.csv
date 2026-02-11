@@ -1,0 +1,14 @@
+category,metric,value,unit,national_rank,source,source_file
+rail,rail_hub_rank,2,national rank,2,Missouri DOT,modot/freight-railroads.html
+rail,state_track_miles,3800,miles,NA,Missouri DOT,modot/freight-railroads.html
+rail,yard_track_miles,2500,miles,NA,Missouri DOT,modot/freight-railroads.html
+rail,freight_tonnage_rank,4,national rank,4,Missouri DOT,modot/freight-railroads.html
+rail,annual_truckload_equivalent,21000000,truckloads,NA,Missouri DOT,modot/freight-railroads.html
+rail,class_1_railroads_accessible,5,count,NA,KSHB News,port_kc/kshb-port-kc-37million-2023.html
+highway,state_highway_miles,33811,miles,6,FHWA Highway Statistics 2023,fhwa/hm81-highway-statistics-2023.html
+highway,rural_miles,30653,miles,NA,FHWA Highway Statistics 2023,fhwa/hm81-highway-statistics-2023.html
+highway,urban_miles,3158,miles,NA,FHWA Highway Statistics 2023,fhwa/hm81-highway-statistics-2023.html
+waterway,midwest_port_rank,2,regional rank,2,KSHB News,port_kc/kshb-port-kc-37million-2023.html
+waterway,river_terminal_acres,415,acres,NA,KSHB News,port_kc/kshb-port-kc-37million-2023.html
+waterway,state_port_investment_fy2024,37000000,USD,NA,KSHB News,port_kc/kshb-port-kc-37million-2023.html
+waterway,total_project_investment,550000000,USD,NA,KSHB News,port_kc/kshb-port-kc-37million-2023.html

@@ -1,11 +1,12 @@
 """Data loading functions for Materials Priority Tool.
 
 This module handles loading and parsing data from:
-- USGS Mineral Commodity Summaries
-- USGS Historical Statistics (DS-140)
-- World Bank Pink Sheet
-- DOE Critical Materials Assessment
-- Reference data (KC logistics, DOE criticality scores)
+- USGS Mineral Commodity Summaries (verified)
+- DOE Critical Materials Assessment (verified)
+- KC Infrastructure data (verified)
+- World Bank Pink Sheet (partial coverage)
+
+All data sources are documented in DATA_SOURCES.md
 """
 
 from pathlib import Path
@@ -21,8 +22,47 @@ from src import (
 )
 
 
+def load_materials_baseline_verified() -> pd.DataFrame:
+    """Load verified materials baseline from USGS MCS 2024.
+
+    Returns:
+        DataFrame with verified import reliance, top producer, US production data
+    """
+    filepath = REFERENCE_DATA_DIR / "materials_baseline_verified.csv"
+    if not filepath.exists():
+        raise FileNotFoundError(f"Verified baseline not found at {filepath}")
+    return pd.read_csv(filepath)
+
+
+def load_doe_criticality_verified() -> pd.DataFrame:
+    """Load verified DOE criticality categories from DOE 2023 Assessment.
+
+    Returns:
+        DataFrame with columns: material, short_term_category, medium_term_category,
+        primary_use, source
+    """
+    filepath = REFERENCE_DATA_DIR / "doe_criticality_verified.csv"
+    if not filepath.exists():
+        raise FileNotFoundError(f"Verified DOE criticality not found at {filepath}")
+    return pd.read_csv(filepath)
+
+
+def load_kc_infrastructure() -> pd.DataFrame:
+    """Load verified KC infrastructure data from government sources.
+
+    Returns:
+        DataFrame with KC infrastructure metrics (rail, highway, waterway)
+    """
+    filepath = REFERENCE_DATA_DIR / "kc_infrastructure.csv"
+    if not filepath.exists():
+        raise FileNotFoundError(f"KC infrastructure data not found at {filepath}")
+    return pd.read_csv(filepath)
+
+
 def load_doe_criticality() -> pd.DataFrame:
     """Load DOE criticality scores from reference data.
+
+    DEPRECATED: Use load_doe_criticality_verified() instead.
 
     Returns:
         DataFrame with columns: material, importance_short, risk_short,
@@ -36,6 +76,8 @@ def load_doe_criticality() -> pd.DataFrame:
 
 def load_kc_logistics() -> pd.DataFrame:
     """Load KC (Kansas City) logistics advantage reference data.
+
+    DEPRECATED: Use load_kc_infrastructure() for verified factual data.
 
     Returns:
         DataFrame with KC logistics metrics per material
