@@ -141,6 +141,15 @@ col_tour, col_spacer = st.columns([1, 4])
 with col_tour:
     render_tour_button()
 
+# Value proposition - what and why
+st.markdown("""
+**Which critical materials should the US prioritize for domestic production?**
+
+This tool answers that question using verified government data (USGS, DOE).
+Materials are scored on **supply risk**, **strategic importance**, and **production feasibility**,
+then ranked to identify priorities. Every number is traceable to source documents.
+""")
+
 st.markdown("---")
 
 if df is not None:
