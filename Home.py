@@ -155,8 +155,9 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Tour section
+st.markdown("")  # Spacing
 render_tour_button()
-st.caption("New here? Take a guided tour to learn how the tool works")
+st.markdown("<p style='font-size: 0.85rem; color: #666; margin-top: -0.5rem;'>New here? Take a guided tour to learn how the tool works</p>", unsafe_allow_html=True)
 
 st.markdown("---")
 
