@@ -1,16 +1,16 @@
 # Materials Priority Tool
 
-**Which critical materials should the US prioritize for domestic production?**
-
-This tool answers that question using verified government data (USGS, DOE). Materials are scored on supply risk, strategic importance, and production feasibility, then ranked to show which deserve focus first for domestic production investment.
-
-**🔗 [Live Demo](https://materials-priority-tool.streamlit.app)**
-
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://materials-priority-tool.streamlit.app)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+**Which critical materials should the US prioritize for domestic production?**
+
+This tool answers that question using verified government data (USGS, DOE). Materials are scored on supply risk, strategic importance, and production feasibility, then ranked to show which deserve focus first for domestic production investment.
+
 ![Dashboard Screenshot](docs/screenshot.png)
+
+**🔗 [Live Demo](https://materials-priority-tool.streamlit.app)**
 
 ---
 
