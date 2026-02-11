@@ -186,6 +186,16 @@ def render_tour_widget():
     total_steps = len(TOUR_STEPS)
     current = st.session_state.tour_step + 1
 
+    # Scroll to top when tour is active
+    st.components.v1.html(
+        """
+        <script>
+            window.parent.document.querySelector('section.main').scrollTo({top: 0, behavior: 'smooth'});
+        </script>
+        """,
+        height=0,
+    )
+
     # Tour container with styling
     with st.container():
         st.markdown(
