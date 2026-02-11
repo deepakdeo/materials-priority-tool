@@ -1,6 +1,8 @@
 # Materials Priority Tool
 
-A data-driven decision support dashboard for scoring and ranking critical materials for domestic production prioritization.
+**Which critical materials should the US prioritize for domestic production?**
+
+This tool answers that question using verified government data (USGS, DOE). Materials are scored on supply risk, strategic importance, and production feasibility, then ranked to show which deserve focus first for domestic production investment.
 
 **🔗 [Live Demo](https://materials-priority-tool.streamlit.app)**
 
@@ -8,16 +10,16 @@ A data-driven decision support dashboard for scoring and ranking critical materi
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+![Dashboard Screenshot](docs/screenshot.png)
+
 ---
 
-## Why This Tool?
+## Key Features
 
-Critical materials decisions are often made using outdated reports, gut instinct, or opaque methodologies. This tool provides:
-
-- **100% Traceable Data** — Every number links to USGS or DOE source documents
-- **Interactive What-If Analysis** — Adjust weights, see rankings change instantly
-- **Uncertainty Quantification** — Know your confidence level, not just the ranking
-- **Open Methodology** — No black box; verify any calculation yourself
+- **Traceable data** — Every number links to USGS or DOE source documents
+- **Interactive analysis** — Adjust weights to match your priorities
+- **Uncertainty quantification** — Know your confidence level, not just the ranking
+- **Export options** — CSV, Excel, and PDF reports
 
 ---
 
