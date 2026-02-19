@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DoD Critical Materials Supply Chain Analysis: Ultra High Purity Nickel &amp; Tungsten Powders</title>
+<style>
+  :root {
+    --navy: #1a2332;
+    --steel: #2d3e50;
+    --accent: #3a7bd5;
+    --gold: #d4a843;
+    --red: #c0392b;
+    --green: #27ae60;
+    --bg: #f5f6f8;
+    --card: #ffffff;
+    --border: #dde1e7;
+    --text: #2c3e50;
+    --muted: #7f8c8d;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .header { background: linear-gradient(135deg, var(--navy) 0%, var(--steel) 100%); color: white; padding: 40px 32px; }
+  .header h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+  .header .subtitle { font-size: 15px; color: #a0b4cc; }
+  .header .date { font-size: 12px; color: #7a92ad; margin-top: 8px; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+  
+  .section { margin-bottom: 32px; }
+  .section-title { font-size: 20px; font-weight: 700; color: var(--navy); border-bottom: 3px solid var(--accent); padding-bottom: 8px; margin-bottom: 16px; }
+  .subsection-title { font-size: 16px; font-weight: 600; color: var(--steel); margin: 16px 0 10px; }
+  
+  .card { background: var(--card); border-radius: 8px; border: 1px solid var(--border); padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .card h3 { font-size: 15px; font-weight: 700; color: var(--accent); margin-bottom: 8px; }
+  .card p, .card li { font-size: 13.5px; }
+  .card ul { margin-left: 18px; }
+  .card li { margin-bottom: 4px; }
+  
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+  
+  .stat-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+  .stat-box { flex: 1; min-width: 150px; background: var(--card); border-radius: 8px; border: 1px solid var(--border); padding: 14px; text-align: center; }
+  .stat-box .value { font-size: 22px; font-weight: 700; color: var(--accent); }
+  .stat-box .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+  .stat-box.alert .value { color: var(--red); }
+  .stat-box.good .value { color: var(--green); }
+  
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0; }
+  th { background: var(--navy); color: white; padding: 10px 12px; text-align: left; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.3px; }
+  td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
+  tr:nth-child(even) { background: #f8f9fb; }
+  tr:hover { background: #eef2f7; }
+  
+  .tier-label { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
+  .tier-0 { background: #1a2332; color: white; }
+  .tier-1 { background: #3a7bd5; color: white; }
+  .tier-2 { background: #5dade2; color: white; }
+  .tier-3 { background: #aed6f1; color: var(--navy); }
+  .tier-raw { background: #f39c12; color: white; }
+  
+  .flow-chain { display: flex; align-items: stretch; gap: 0; margin: 16px 0; overflow-x: auto; }
+  .flow-step { flex: 1; min-width: 160px; padding: 14px; text-align: center; position: relative; }
+  .flow-step::after { content: '→'; position: absolute; right: -8px; top: 50%; transform: translateY(-50%); font-size: 18px; color: var(--accent); font-weight: bold; z-index: 1; }
+  .flow-step:last-child::after { display: none; }
+  .flow-step .step-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; margin-bottom: 6px; }
+  .flow-step .step-content { font-size: 12px; color: var(--muted); }
+  .flow-step.raw { background: #fef3e2; border: 1px solid #f39c12; border-radius: 8px 0 0 8px; }
+  .flow-step.intermediate { background: #e8f4fd; border: 1px solid #3a7bd5; }
+  .flow-step.advanced { background: #eafaf1; border: 1px solid #27ae60; }
+  .flow-step.end { background: #f4ecf7; border: 1px solid #8e44ad; border-radius: 0 8px 8px 0; }
+
+  .risk-tag { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; }
+  .risk-high { background: #fde8e8; color: #c0392b; }
+  .risk-med { background: #fef3e2; color: #e67e22; }
+  .risk-low { background: #eafaf1; color: #27ae60; }
+  
+  .note { background: #fff8e1; border-left: 4px solid var(--gold); padding: 12px 16px; margin: 12px 0; font-size: 13px; border-radius: 0 6px 6px 0; }
+  .warning { background: #fde8e8; border-left: 4px solid var(--red); padding: 12px 16px; margin: 12px 0; font-size: 13px; border-radius: 0 6px 6px 0; }
+  
+  .source { font-size: 11px; color: var(--muted); margin-top: 6px; font-style: italic; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .gap-bar { height: 20px; border-radius: 4px; margin: 4px 0; position: relative; overflow: hidden; }
+  .gap-bar .fill { height: 100%; border-radius: 4px; }
+  .gap-bar .fill-label { position: absolute; right: 8px; top: 2px; font-size: 10px; font-weight: 600; color: white; }
+  sup.cite a { font-size: 10px; color: var(--accent); text-decoration: none; font-weight: 600; }
+  sup.cite a:hover { text-decoration: underline; }
+  .source-list { counter-reset: source-counter; list-style: none; padding-left: 0; }
+  .source-list li { counter-increment: source-counter; margin-bottom: 6px; padding-left: 24px; position: relative; }
+  .source-list li::before { content: "[" counter(source-counter) "]"; position: absolute; left: 0; font-weight: 700; color: var(--accent); font-size: 11px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>DoD Critical Materials Supply Chain Analysis</h1>
+  <div class="subtitle">Ultra High Purity Nickel &amp; Tungsten Powders: From Raw Material to Weapon System</div>
+  <div class="date">Prepared by Deepak Deo &bull; Data Sources: USGS Mineral Commodity Summaries 2026 &bull; GAO Reports &bull; Open-Source Industry Data &bull; February 2026</div>
+</div>
+
+<div class="container">
+
+<!-- ============================================================ -->
+<!-- SECTION 1: EXECUTIVE SUMMARY -->
+<!-- ============================================================ -->
+<div class="section">
+  <div class="section-title">1. Executive Summary &amp; Key Findings</div>
+  <div class="stat-row">
+    <div class="stat-box alert"><div class="value">&gt;50%</div><div class="label">U.S. Tungsten Import Reliance <sup class="cite"><a href="#src1">[1]</a></sup></div></div>
+    <div class="stat-box alert"><div class="value">41%</div><div class="label">U.S. Nickel Import Reliance <sup class="cite"><a href="#src1">[1]</a></sup></div></div>
+    <div class="stat-box alert"><div class="value">0 mt</div><div class="label">U.S. Tungsten Mine Production <sup class="cite"><a href="#src1">[1]</a></sup></div></div>
+    <div class="stat-box"><div class="value">10,000 mt</div><div class="label">U.S. Nickel Mine Production <sup class="cite"><a href="#src1">[1]</a></sup></div></div>
+    <div class="stat-box alert"><div class="value">~80%</div><div class="label">China's Global Tungsten Share <sup class="cite"><a href="#src1">[1]</a></sup></div></div>
+  </div>
+  <div class="card">
+    <p>This analysis maps the complete supply chain from ore to weapon system for two critical defense materials: <strong>ultra high purity nickel powder</strong> (used in superalloy turbine engine components, additive manufacturing, and advanced coatings) and <strong>tungsten powder</strong> (used in kinetic energy penetrators, cemented carbides for tooling, and counterweights). For each material, we identify the companies at every tier, from mining through refining, powder production, advanced material fabrication, component manufacturing, and final weapon system integration, and estimate material flows based on the 2026 USGS MCS and open-source industry data.</p>
+    <p style="margin-top:8px;">A critical January 2027 DFARS deadline <sup class="cite"><a href="#src2">[2]</a></sup> will prohibit DoD contractors from delivering items containing tungsten powder or tungsten heavy alloy mined, refined, or produced in China, Russia, Iran, or North Korea. This creates an urgent supply chain restructuring requirement.</p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 2: NICKEL SUPPLY CHAIN -->
+<!-- ============================================================ -->
+<div class="section">
+  <div class="section-title">2. Ultra High Purity Nickel Powder: Complete Supply Chain</div>
+  
+  <div class="subsection-title">2.1 Material Flow: Ore → Powder → Superalloy → Engine</div>
+  <div class="flow-chain">
+    <div class="flow-step raw">
+      <div class="step-title">Tier 3: Mining</div>
+      <div class="step-content">Nickel ore/concentrate<br>Laterite or sulfide deposits<br>~3.9M mt global (2025e)</div>
+    </div>
+    <div class="flow-step intermediate">
+      <div class="step-title">Tier 2: Smelting/Refining</div>
+      <div class="step-content">Class I nickel (≥99.8%)<br>Cathode, briquettes, powder<br>~100,000 mt U.S. imports</div>
+    </div>
+    <div class="flow-step intermediate">
+      <div class="step-title">Tier 2: Powder Production</div>
+      <div class="step-content">Ultra high purity (≥99.99%)<br>Gas atomization, carbonyl<br>Tight PSD for AM/PM</div>
+    </div>
+    <div class="flow-step advanced">
+      <div class="step-title">Tier 1: Advanced Materials</div>
+      <div class="step-content">Superalloy ingots/billets<br>Inconel 718, Waspaloy, CMSX-4<br>Castings, forgings, AM parts</div>
+    </div>
+    <div class="flow-step end">
+      <div class="step-title">Prime/OEM: Weapon System</div>
+      <div class="step-content">F-35, F-22, F/A-18<br>Turbine blades &amp; discs<br>GE, P&amp;W, RR engines</div>
+    </div>
+  </div>
+
+  <div class="subsection-title">2.2 2026 MCS Data: U.S. Nickel Position</div>
+  <div class="stat-row">
+    <div class="stat-box"><div class="value">10,000</div><div class="label">U.S. Mine Production (mt Ni content, 2025e)</div></div>
+    <div class="stat-box"><div class="value">100,000</div><div class="label">Primary Imports (mt, 2025e)</div></div>
+    <div class="stat-box"><div class="value">120,000</div><div class="label">Primary Consumption (mt, 2025e)</div></div>
+    <div class="stat-box"><div class="value">220,000</div><div class="label">Total Apparent Consumption (mt, 2025e)</div></div>
+    <div class="stat-box"><div class="value">$6.90/lb</div><div class="label">Avg LME Cash Price (2025e)</div></div>
+  </div>
+  <div class="note">
+    <strong>Key MCS 2026 Insight:</strong> The U.S. has only one active nickel mine (Eagle Mine, MI) <sup class="cite"><a href="#src1">[1]</a></sup>. The last primary nickel refinery (Port Nickel, LA) closed in 1985 <sup class="cite"><a href="#src1">[1]</a></sup>. Primary import reliance is ~41%, but excluding scrap, it is <strong>nearly 100%</strong>. Import sources: Canada 44%, Norway 11%, Australia 8%, Brazil 7% <sup class="cite"><a href="#src1">[1]</a></sup>. Global surplus of ~189,000 mt through 9 months of 2025 <sup class="cite"><a href="#src1">[1]</a></sup>.
+  </div>
+
+  <div class="subsection-title">2.3 Supply Chain Participants by Tier</div>
+  <table>
+    <tr>
+      <th style="width:80px;">Tier</th>
+      <th style="width:160px;">Company</th>
+      <th>Role &amp; Products</th>
+      <th style="width:100px;">Location</th>
+      <th style="width:80px;">Supply Risk</th>
+    </tr>
+    <!-- TIER 3: MINING -->
+    <tr><td><span class="tier-label tier-3">Tier 3</span></td><td><strong>Lundin Mining (Eagle Mine)</strong></td><td>Only active U.S. nickel mine; ~10,000 mt/yr Ni in concentrate; exported to Canada for smelting</td><td>Michigan, USA</td><td><span class="risk-tag risk-med">Medium</span></td></tr>
+    <tr><td><span class="tier-label tier-3">Tier 3</span></td><td><strong>Vale S.A.</strong></td><td>Global #2 Ni producer; Sudbury &amp; Voisey's Bay mines; ~200,000 mt/yr; major U.S. feed source</td><td>Canada / Brazil</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-3">Tier 3</span></td><td><strong>Glencore</strong></td><td>Sudbury &amp; Raglan mines; ~100,000 mt/yr Ni; refines to Class I</td><td>Canada / Australia</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-3">Tier 3</span></td><td><strong>BHP</strong></td><td>Nickel West (currently care &amp; maintenance due to low prices); major reserve holder</td><td>Australia</td><td><span class="risk-tag risk-med">Medium</span></td></tr>
+    <tr><td><span class="tier-label tier-3">Tier 3</span></td><td><strong>Nornickel</strong></td><td>Russia; ~200,000 mt/yr; limited U.S. supply due to sanctions pressure</td><td>Russia</td><td><span class="risk-tag risk-high">High</span></td></tr>
+    <tr><td><span class="tier-label tier-3">Tier 3</span></td><td><strong>Indonesia (multiple)</strong></td><td>2.6M mt/yr (2025e); dominates global supply but mostly Class II / NPI for stainless</td><td>Indonesia</td><td><span class="risk-tag risk-high">High</span></td></tr>
+    <!-- TIER 2: SMELTING/REFINING -->
+    <tr><td><span class="tier-label tier-2">Tier 2</span></td><td><strong>Vale Long Harbour</strong></td><td>Hydrometallurgical refinery; produces nickel rounds (Class I) from Voisey's Bay; ~50,000 mt/yr</td><td>Newfoundland, CA</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-2">Tier 2</span></td><td><strong>Glencore Nikkelverk</strong></td><td>Electrolytic refinery; 92,000 mt/yr capacity; key source for U.S. (Norway = 11% of imports)</td><td>Norway</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-2">Tier 2</span></td><td><strong>Vale Copper Cliff / Clydach</strong></td><td>Nickel refining complex; produces carbonyl nickel pellets &amp; powder</td><td>Canada / UK</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <!-- TIER 2: POWDER PRODUCTION (UHP) -->
+    <tr><td><span class="tier-label tier-2">Tier 2</span></td><td><strong>HMI (RTX/Pratt &amp; Whitney)</strong></td><td><strong>World leader</strong> in Ni-based superalloy powders <sup class="cite"><a href="#src11">[11]</a></sup>; gas atomized; for turbine disc PM/AM; serves all major engine OEMs</td><td>New Jersey, USA</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-2">Tier 2</span></td><td><strong>Carpenter Technology (Carpenter Additive)</strong></td><td>Gas-atomized Ni superalloy powders (IN718, IN625, Waspaloy); AM-grade; EBM/LPBF qualified</td><td>Philadelphia, PA</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-2">Tier 2</span></td><td><strong>6K Additive</strong></td><td>UniMelt® plasma spheroidization; Ni718/625 powders from recycled feedstock; DPA Title III $23.4M grant recipient <sup class="cite"><a href="#src15">[15]</a></sup></td><td>Pittsburgh, PA</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-2">Tier 2</span></td><td><strong>ATI (Allegheny Technologies)</strong></td><td>Specialty Ni alloy powder production; VIGA atomization; aerospace-qualified</td><td>Dallas, TX / PA</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-2">Tier 2</span></td><td><strong>Höganäs AB</strong></td><td>Major global metal powder producer; Ni and Ni-alloy powders for PM &amp; thermal spray</td><td>Sweden</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-2">Tier 2</span></td><td><strong>Vale (Carbonyl Ni Powder)</strong></td><td>Carbonyl decomposition process; produces ultra-fine, high-purity Ni powder (Type 123, 255, etc.)</td><td>Canada / UK</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <!-- TIER 1: ADVANCED MATERIALS -->
+    <tr><td><span class="tier-label tier-1">Tier 1</span></td><td><strong>Precision Castparts Corp. (Berkshire Hathaway)</strong></td><td><strong>#1 globally</strong>: investment castings, forgings, airfoils in Ni superalloys for all major engines; single-crystal turbine blades <sup class="cite"><a href="#src10">[10]</a></sup></td><td>Portland, OR</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-1">Tier 1</span></td><td><strong>Howmet Aerospace (formerly Arconic)</strong></td><td>Ni superalloy castings &amp; forgings; single-crystal blades; engine structural components</td><td>Pittsburgh, PA</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-1">Tier 1</span></td><td><strong>Special Metals Corp. (PCC subsidiary)</strong></td><td>Produces INCONEL®, MONEL®, NIMONIC® alloy mill products; VIM/VAR billets &amp; ingots; key named alloys</td><td>Huntington, WV</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-1">Tier 1</span></td><td><strong>Haynes International</strong></td><td>HASTELLOY® &amp; HAYNES® alloys; sheet, plate, bar, forgings; combustion liners, exhaust systems</td><td>Kokomo, IN</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-1">Tier 1</span></td><td><strong>Cannon Muskegon (PCC subsidiary)</strong></td><td>Master melter of single-crystal &amp; directionally solidified Ni superalloy ingots for casting houses</td><td>Muskegon, MI</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-1">Tier 1</span></td><td><strong>ATI Forged Products</strong></td><td>Large open-die &amp; closed-die forgings in Ni superalloys; turbine discs, rings, shafts</td><td>Multiple U.S.</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-1">Tier 1</span></td><td><strong>Doncasters Group</strong></td><td>Investment castings &amp; precision forgings; turbine blades &amp; vanes</td><td>UK / USA</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <!-- PRIME / OEM -->
+    <tr><td><span class="tier-label tier-0">Prime</span></td><td><strong>RTX / Pratt &amp; Whitney</strong></td><td>F135 (F-35), F119 (F-22), F100 (F-15/16); PW800 series; integrates Ni superalloy turbine components</td><td>East Hartford, CT</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-0">Prime</span></td><td><strong>GE Aerospace</strong></td><td>F414 (F/A-18), F110 (F-16), T700 (Black Hawk); GE9X commercial; major Ni superalloy consumer</td><td>Cincinnati, OH</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-0">Prime</span></td><td><strong>Rolls-Royce</strong></td><td>F130 (B-52 re-engine), AE 1107C (V-22); Trent series commercial; UK-allied supply</td><td>UK / Indianapolis</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-0">Prime</span></td><td><strong>Lockheed Martin</strong></td><td>F-35 platform integrator; procures engines from P&amp;W; largest single DoD aircraft program</td><td>Fort Worth, TX</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-0">Prime</span></td><td><strong>Boeing</strong></td><td>F/A-18E/F, F-15EX, KC-46, P-8; airframe &amp; systems integration; engines from GE/P&amp;W</td><td>St. Louis, MO</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-0">Prime</span></td><td><strong>Northrop Grumman</strong></td><td>B-21 Raider; engines sourced from P&amp;W (F135-derivative); NGAD-related work</td><td>Palmdale, CA</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+  </table>
+
+  <div class="subsection-title">2.4 Estimated Material Quantities: Nickel in Defense End Items</div>
+  <div class="card">
+    <table>
+      <tr><th>End Item / Component</th><th>Ni Superalloy Content (approx.)</th><th>Key Alloys</th><th>Annual DoD Demand Signal</th></tr>
+      <tr><td>F135 engine (F-35): turbine blades, discs, combustor</td><td>~300–500 kg Ni superalloy per engine</td><td>CMSX-4/10, IN718, Waspaloy, René 88DT</td><td>~156 engines/yr (FY25) × ~400 kg ≈ 62 mt</td></tr>
+      <tr><td>F110/F414 engines (F-16, F/A-18)</td><td>~250–400 kg per engine</td><td>IN718, René 95, Waspaloy</td><td>~50–80 engines/yr × ~300 kg ≈ 15–24 mt</td></tr>
+      <tr><td>T700 engine (Black Hawk, Apache)</td><td>~80–120 kg per engine</td><td>IN718, IN713, René 77</td><td>~200+ engines/yr × ~100 kg ≈ 20 mt</td></tr>
+      <tr><td>Naval gas turbines (LM2500, LM6000)</td><td>~1,000–2,000 kg per turbine</td><td>IN738, IN939, single-crystal blades</td><td>~10–20 units/yr × ~1,500 kg ≈ 15–30 mt</td></tr>
+      <tr><td>Missile components (warhead liners, motor cases)</td><td>~5–50 kg per unit (varies widely)</td><td>IN718, Haynes 230, MarM-247</td><td>Hundreds to thousands of units; ~10–30 mt total</td></tr>
+      <tr><td colspan="3" style="font-weight:700;">Estimated DoD-specific Ni superalloy demand</td><td style="font-weight:700;">~120–170 mt/yr (Ni content)</td></tr>
+    </table>
+    <p class="source">Estimates derived from open-source engine weight data, public procurement quantities from DoD Comptroller P-1 exhibits, and industry material intensity studies. Actual BOMs are contractor-proprietary. Total DoD nickel demand (all forms including stainless, plating, etc.) is significantly higher, estimated at 2,000–5,000 mt/yr, but remains &lt;5% of total U.S. apparent consumption of 220,000 mt.</p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 3: TUNGSTEN SUPPLY CHAIN -->
+<!-- ============================================================ -->
+<div class="section">
+  <div class="section-title">3. Tungsten Powder: Complete Supply Chain</div>
+  
+  <div class="subsection-title">3.1 Material Flow: Ore → APT → Powder → End Product</div>
+  <div class="flow-chain">
+    <div class="flow-step raw">
+      <div class="step-title">Tier 3: Mining</div>
+      <div class="step-content">Wolframite / Scheelite<br>Concentrate (65% WO₃)<br>~85,000 mt global (2025e)</div>
+    </div>
+    <div class="flow-step intermediate">
+      <div class="step-title">Tier 2: Chemical Processing</div>
+      <div class="step-content">APT (Ammonium<br>Paratungstate)<br>Intermediate for all W products</div>
+    </div>
+    <div class="flow-step intermediate">
+      <div class="step-title">Tier 2: Powder Reduction</div>
+      <div class="step-content">W metal powder<br>(≥99.9% purity)<br>H₂ reduction of WO₃</div>
+    </div>
+    <div class="flow-step advanced">
+      <div class="step-title">Tier 1: Product Fabrication</div>
+      <div class="step-content">WC powder, WHA sinters<br>Cemented carbides<br>Penetrators, mill products</div>
+    </div>
+    <div class="flow-step end">
+      <div class="step-title">Prime: Defense End Items</div>
+      <div class="step-content">KE penetrators (120mm)<br>Fragmentation devices<br>Counterweights, tooling</div>
+    </div>
+  </div>
+
+  <div class="subsection-title">3.2 2026 MCS Data: U.S. Tungsten Position</div>
+  <div class="stat-row">
+    <div class="stat-box alert"><div class="value">0 mt</div><div class="label">U.S. Mine Production (2025e)</div></div>
+    <div class="stat-box"><div class="value">1,700</div><div class="label">Ore/Concentrate Imports (mt W, 2025e)</div></div>
+    <div class="stat-box"><div class="value">10,000</div><div class="label">Other Forms Imports (mt W, 2025e)</div></div>
+    <div class="stat-box alert"><div class="value">$380/mtu</div><div class="label">Concentrate Price (↑51% YoY)</div></div>
+    <div class="stat-box"><div class="value">7 firms</div><div class="label">U.S. W Powder Converters</div></div>
+  </div>
+  <div class="warning">
+    <strong>Critical Vulnerability:</strong> The U.S. has had zero domestic tungsten mine production since 2015 <sup class="cite"><a href="#src1">[1]</a></sup>. China produces ~80% of global tungsten (~67,000 mt/yr) <sup class="cite"><a href="#src1">[1]</a></sup> and in February 2025 implemented new export controls on tungsten products <sup class="cite"><a href="#src1">[1]</a></sup><sup class="cite"><a href="#src7">[7]</a></sup>. Rotterdam APT prices surged from $266 to $675/mtu WO₃ through 2025 <sup class="cite"><a href="#src1">[1]</a></sup>. DFARS procurement restrictions on Chinese tungsten take effect January 1, 2027 <sup class="cite"><a href="#src2">[2]</a></sup>. Multiple DPA Title III projects awarded in Nevada, New Brunswick, and Yukon to re-shore supply <sup class="cite"><a href="#src7">[7]</a></sup><sup class="cite"><a href="#src17">[17]</a></sup>.
+  </div>
+
+  <div class="subsection-title">3.3 Supply Chain Participants by Tier</div>
+  <table>
+    <tr>
+      <th style="width:80px;">Tier</th>
+      <th style="width:170px;">Company</th>
+      <th>Role &amp; Products</th>
+      <th style="width:100px;">Location</th>
+      <th style="width:80px;">Supply Risk</th>
+    </tr>
+    <!-- TIER 3: MINING -->
+    <tr><td><span class="tier-label tier-3">Tier 3</span></td><td><strong>China (multiple state/private)</strong></td><td>~67,000 mt/yr; Jiangxi, Hunan provinces; Xiamen Tungsten, China Molybdenum, etc.</td><td>China</td><td><span class="risk-tag risk-high">High</span></td></tr>
+    <tr><td><span class="tier-label tier-3">Tier 3</span></td><td><strong>Almonty Industries (Sangdong)</strong></td><td>Re-opening Sangdong mine, South Korea; Phase I production prep (2025); scheelite; DPA-supported</td><td>South Korea</td><td><span class="risk-tag risk-med">Medium</span></td></tr>
+    <tr><td><span class="tier-label tier-3">Tier 3</span></td><td><strong>Masan High-Tech Materials</strong></td><td>Nui Phao mine, Vietnam; ~3,000 mt/yr W; also acquired H.C. Starck processing</td><td>Vietnam / Germany</td><td><span class="risk-tag risk-med">Medium</span></td></tr>
+    <tr><td><span class="tier-label tier-3">Tier 3</span></td><td><strong>Wolfram Bergbau (Plansee Group)</strong></td><td>Mittersill mine, Austria; ~840 mt/yr W; Europe's main mine; plus Bergla processing</td><td>Austria</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-3">Tier 3</span></td><td><strong>Bolivia (Comibol / artisanal)</strong></td><td>~1,700 mt/yr; mostly small-scale operations; wolframite concentrate</td><td>Bolivia</td><td><span class="risk-tag risk-med">Medium</span></td></tr>
+    <tr><td><span class="tier-label tier-3">Tier 3</span></td><td><strong>Western Exploration (Pilot Mountain)</strong></td><td>Nevada deposit; DPA Title III funding received <sup class="cite"><a href="#src17">[17]</a></sup>; potential future U.S. production</td><td>Nevada, USA</td><td><span class="risk-tag risk-med">Medium</span></td></tr>
+    <tr><td><span class="tier-label tier-3">Tier 3</span></td><td><strong>Fireweed Metals (Mactung)</strong></td><td>Yukon, Canada; one of world's largest undeveloped W deposits; DPA Title III support <sup class="cite"><a href="#src7">[7]</a></sup><sup class="cite"><a href="#src17">[17]</a></sup></td><td>Canada</td><td><span class="risk-tag risk-med">Medium</span></td></tr>
+    <tr><td><span class="tier-label tier-3">Tier 3</span></td><td><strong>Kazakhstan (Boguty)</strong></td><td>New production started 2025; ~2,400 mt/yr; joint venture with U.S. interests announced Oct 2025</td><td>Kazakhstan</td><td><span class="risk-tag risk-med">Medium</span></td></tr>
+    <!-- TIER 2: CHEMICAL PROCESSING / APT -->
+    <tr><td><span class="tier-label tier-2">Tier 2</span></td><td><strong>Global Tungsten &amp; Powders (GTP / Plansee Group)</strong></td><td><strong>Key U.S. producer</strong> <sup class="cite"><a href="#src13">[13]</a></sup>: APT, WO₃, W powder, WC powder, Co powder, ready-to-press grades, AND finished WHA components; full vertical integration from concentrate to finished defense parts</td><td>Towanda, PA</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-2">Tier 2</span></td><td><strong>Kennametal Inc.</strong></td><td>Processes ore → APT → WO₃ → W powder → WC powder; &gt;80 yrs tungsten experience; &gt;99.9% purity; serves defense, oil &amp; gas, mining <sup class="cite"><a href="#src12">[12]</a></sup></td><td>Fallon, NV / Latrobe, PA</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-2">Tier 2</span></td><td><strong>Buffalo Tungsten Inc.</strong></td><td>U.S. converter of W concentrates to powder/carbide; includes New York Tungsten JV with Sumitomo</td><td>Buffalo, NY</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-2">Tier 2</span></td><td><strong>Elmet Technologies</strong></td><td>Only U.S.-owned fully integrated W &amp; Mo sintered/drawn/swaged rod producer; critical for KEP production <sup class="cite"><a href="#src14">[14]</a></sup></td><td>Lewiston, ME</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-2">Tier 2</span></td><td><strong>H.C. Starck Tungsten (Masan Group)</strong></td><td>Major global W intermediate processor; APT, W &amp; WC powders; facilities in Germany &amp; Canada</td><td>Germany / Canada</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-2">Tier 2</span></td><td><strong>Xiamen Tungsten (XTC)</strong></td><td>China's largest W processor; APT, W powders; facing export controls &amp; DFARS restrictions</td><td>China</td><td><span class="risk-tag risk-high">High</span></td></tr>
+    <tr><td><span class="tier-label tier-2">Tier 2</span></td><td><strong>6K Additive</strong></td><td>UniMelt® process for spherical W powder from recycled feedstock; DPA Title III grant <sup class="cite"><a href="#src15">[15]</a></sup>; AM-grade</td><td>Pittsburgh, PA</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <!-- TIER 1: PRODUCT FABRICATION -->
+    <tr><td><span class="tier-label tier-1">Tier 1</span></td><td><strong>Global Tungsten &amp; Powders (GTP Parts)</strong></td><td>WHA finished components for aerospace &amp; defense; sintered &amp; machined penetrators, counterweights</td><td>Towanda, PA</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-1">Tier 1</span></td><td><strong>Elmet Technologies</strong></td><td>Sintered, drawn &amp; swaged W rods for kinetic energy penetrators; WHA blanks for machining</td><td>Lewiston, ME</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-1">Tier 1</span></td><td><strong>Kennametal</strong></td><td>Cemented WC cutting tools, wear parts, mining inserts; WHA defense components; "no reliance on China" supply chain <sup class="cite"><a href="#src12">[12]</a></sup></td><td>Multiple U.S.</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-1">Tier 1</span></td><td><strong>Sandvik (Hyperion Materials)</strong></td><td>Cemented carbide tooling; WC grades for defense machining applications</td><td>Sweden / USA</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-1">Tier 1</span></td><td><strong>Mi-Tech Metals / Plansee USA</strong></td><td>W &amp; Mo mill products; custom machined defense components</td><td>Indianapolis, IN</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <!-- PRIME / MUNITIONS OEM -->
+    <tr><td><span class="tier-label tier-0">Prime</span></td><td><strong>General Dynamics OTS</strong></td><td>120mm M829-series APFSDS-T (DU penetrators); KEW-A1 through A4 (WHA variants for export); major tank ammo producer</td><td>St. Petersburg, FL</td><td><span class="risk-tag risk-med">Medium</span></td></tr>
+    <tr><td><span class="tier-label tier-0">Prime</span></td><td><strong>Northrop Grumman (former Orbital ATK)</strong></td><td>M829A4 APFSDS-T producer; 120mm tank ammunition; WHA &amp; DU penetrators; medium-caliber ammo</td><td>Multiple U.S.</td><td><span class="risk-tag risk-med">Medium</span></td></tr>
+    <tr><td><span class="tier-label tier-0">Prime</span></td><td><strong>Rheinmetall</strong></td><td>DM53/63 APFSDS-T (WHA penetrators); KE-W series for NATO; key allied supplier</td><td>Germany</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-0">Prime</span></td><td><strong>BAE Systems</strong></td><td>Naval gun ammunition, 155mm artillery; W fragmentation components; vehicle counterweights</td><td>UK / USA</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-0">Prime</span></td><td><strong>Raytheon (RTX)</strong></td><td>Guided munitions (SDB, Excalibur); W fragmentation liners in precision munitions; missile components</td><td>Tucson, AZ</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+    <tr><td><span class="tier-label tier-0">Prime</span></td><td><strong>Lockheed Martin (Missiles &amp; Fire Control)</strong></td><td>ATACMS, JASSM, PAC-3; W used in select warhead liners and kinetic kill vehicles</td><td>Multiple U.S.</td><td><span class="risk-tag risk-low">Low</span></td></tr>
+  </table>
+
+  <div class="subsection-title">3.4 Estimated Material Quantities: Tungsten in Defense</div>
+  <div class="card">
+    <table>
+      <tr><th>End Item / Application</th><th>W Content (approx.)</th><th>Form / Alloy</th><th>Annual DoD Demand Signal</th></tr>
+      <tr><td>120mm APFSDS-T penetrators (M829 / KEW series)</td><td>~4–8 kg W per penetrator rod</td><td>W-Ni-Fe or W-Ni-Cu heavy alloy (90–97% W)</td><td>~10,000–30,000 rounds/yr × ~6 kg ≈ 60–180 mt</td></tr>
+      <tr><td>25/30mm armor-piercing ammunition</td><td>~0.05–0.15 kg W per round</td><td>WC or WHA cores</td><td>Millions of rounds; ~50–150 mt</td></tr>
+      <tr><td>Precision munition fragmentation (SDB, Excalibur, etc.)</td><td>~1–10 kg W fragments per munition</td><td>W cubes, WHA pre-formed fragments</td><td>~5,000–15,000 units; ~20–50 mt</td></tr>
+      <tr><td>Counterweights &amp; ballast (aircraft, missiles, vehicles)</td><td>Varies widely; 5–200 kg per item</td><td>WHA sintered shapes</td><td>~10–30 mt</td></tr>
+      <tr><td>Cemented carbide tooling (machining for defense production)</td><td>Indirect but critical; enables manufacturing</td><td>WC-Co cemented carbides</td><td>~100–200 mt (60% of all U.S. W consumption)</td></tr>
+      <tr><td colspan="3" style="font-weight:700;">Estimated DoD-direct tungsten demand (all forms)</td><td style="font-weight:700;">~300–600 mt/yr W content</td></tr>
+    </table>
+    <p class="source">Based on open-source munitions weight data, procurement line quantities from DoD Comptroller P-1 exhibits, and USGS consumption breakdowns <sup class="cite"><a href="#src1">[1]</a></sup>. The 60% cemented carbide share applies to all U.S. consumption <sup class="cite"><a href="#src1">[1]</a></sup> (~estimated W apparent consumption is withheld but likely 8,000–12,000 mt/yr). DoD-direct demand likely represents 5–10% of total U.S. consumption but is concentrated in specialized, hard-to-substitute applications (penetrators, fragmentation).</p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 4: COMPARATIVE GAP ANALYSIS -->
+<!-- ============================================================ -->
+<div class="section">
+  <div class="section-title">4. Supply Chain Gap Analysis &amp; Risk Assessment</div>
+  
+  <div class="grid-2">
+    <div class="card">
+      <h3>Nickel: Moderate Risk, Allied Supply Adequate</h3>
+      <ul>
+        <li><strong>Mining:</strong> Canada and Australia provide ~60% of U.S. import sources, allied nations with reliable supply <sup class="cite"><a href="#src1">[1]</a></sup></li>
+        <li><strong>Refining:</strong> No U.S. primary refinery since 1985 <sup class="cite"><a href="#src1">[1]</a></sup>; fully dependent on Canadian &amp; Norwegian refineries; 3 refinery projects under development (MO, OK, TX) <sup class="cite"><a href="#src1">[1]</a></sup></li>
+        <li><strong>Powder:</strong> Strong domestic UHP powder production (HMI/RTX, Carpenter, 6K, ATI); aerospace-qualified</li>
+        <li><strong>Advanced materials:</strong> World-class U.S. superalloy sector (PCC, Howmet, Special Metals, Haynes); minimal foreign dependency</li>
+        <li><strong>Key gap:</strong> Refining step is the choke point: all Class I nickel for U.S. consumption is imported or refined abroad</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Tungsten: HIGH Risk, Adversary Dominated</h3>
+      <ul>
+        <li><strong>Mining:</strong> Zero U.S. production <sup class="cite"><a href="#src1">[1]</a></sup>; China produces ~80% globally <sup class="cite"><a href="#src1">[1]</a></sup>; 2025 Chinese export controls sharply reduced availability <sup class="cite"><a href="#src7">[7]</a></sup></li>
+        <li><strong>APT/Chemical:</strong> 7 U.S. converters exist but depend on imported feedstock (concentrate or APT) <sup class="cite"><a href="#src1">[1]</a></sup>; China still 26% of imports</li>
+        <li><strong>Powder:</strong> Domestic capacity exists (GTP, Kennametal, Buffalo, Elmet) but constrained by feedstock supply</li>
+        <li><strong>Products:</strong> U.S. fabrication capacity adequate for defense needs; GTP, Elmet, Kennametal can produce penetrators &amp; WHA components</li>
+        <li><strong>Key gap:</strong> Mining is the existential choke point: no domestic mine, ally/friend-shored mines (Sangdong, Mactung, Pilot Mountain) are years from full production</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="subsection-title">4.1 Supply Chain Vulnerability Scorecard</div>
+  <table>
+    <tr><th>Dimension</th><th>Nickel (UHP Powder)</th><th>Tungsten (W Powder)</th></tr>
+    <tr><td>U.S. mine production</td><td><span class="risk-tag risk-med">1 mine, 10,000 mt/yr</span></td><td><span class="risk-tag risk-high">Zero since 2015</span></td></tr>
+    <tr><td>Allied mine supply</td><td><span class="risk-tag risk-low">Canada, Australia strong</span></td><td><span class="risk-tag risk-med">Austria small; Korea/Canada in dev</span></td></tr>
+    <tr><td>Adversary concentration</td><td><span class="risk-tag risk-med">Indonesia 67%, Russia 5%</span></td><td><span class="risk-tag risk-high">China ~80%, N. Korea 2%</span></td></tr>
+    <tr><td>U.S. refining/processing</td><td><span class="risk-tag risk-high">No primary refinery</span></td><td><span class="risk-tag risk-med">7 converters; feedstock dependent</span></td></tr>
+    <tr><td>U.S. powder production</td><td><span class="risk-tag risk-low">Multiple qualified producers</span></td><td><span class="risk-tag risk-low">GTP, Kennametal, Buffalo, Elmet</span></td></tr>
+    <tr><td>Tier 1 advanced materials</td><td><span class="risk-tag risk-low">PCC, Howmet, Haynes world-class</span></td><td><span class="risk-tag risk-low">GTP Parts, Elmet, Kennametal</span></td></tr>
+    <tr><td>Substitutability</td><td><span class="risk-tag risk-med">Limited for superalloys; Ti partial</span></td><td><span class="risk-tag risk-med">DU for penetrators; Mo/Ti partial for carbides</span></td></tr>
+    <tr><td>NDS stockpile position</td><td><span class="risk-tag risk-med">~9,700 mt contaminated (DOE) <sup class="cite"><a href="#src3">[3]</a></sup></span></td><td><span class="risk-tag risk-med">499 mt ore for disposal; 2,041 mt acquisition planned <sup class="cite"><a href="#src3">[3]</a></sup><sup class="cite"><a href="#src4">[4]</a></sup></span></td></tr>
+    <tr><td>Price trend (2025)</td><td><span class="risk-tag risk-low">↓11%, surplus market <sup class="cite"><a href="#src1">[1]</a></sup></span></td><td><span class="risk-tag risk-high">↑51%, export controls <sup class="cite"><a href="#src1">[1]</a></sup></span></td></tr>
+    <tr><td style="font-weight:700;">Overall risk to DoD</td><td style="font-weight:700;"><span class="risk-tag risk-med">MODERATE</span></td><td style="font-weight:700;"><span class="risk-tag risk-high">HIGH / CRITICAL</span></td></tr>
+  </table>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 5: METHODOLOGY NOTES -->
+<!-- ============================================================ -->
+<div class="section">
+  <div class="section-title">5. Methodology &amp; Limitations</div>
+  <div class="card">
+    <h3>What DoD Comptroller Budget Data Provides</h3>
+    <p>The P-1 (Procurement), R-1 (RDT&amp;E), and detailed P-5/P-40 line item justifications give unit quantities and dollar amounts for weapon systems procured each fiscal year. This establishes the <strong>demand signal in end items</strong>, e.g., how many F-35 aircraft, 120mm tank rounds, or Tomahawk missiles DoD is buying. These are the essential "Layer 1" of any materials demand model.</p>
+    <p style="margin-top:8px;"><strong>What they do NOT provide:</strong> Bills of materials (BOMs), material composition by weight, or material intensity per unit. These are proprietary to prime contractors and typically classified or ITAR-controlled.</p>
+    
+    <h3 style="margin-top:14px;">Translation Layer: End Items → Material Demand</h3>
+    <p>The material quantities in this analysis are <strong>order-of-magnitude estimates</strong> derived from:</p>
+    <ul style="margin-top:6px;">
+      <li>Published engine/airframe weight breakdowns and material composition studies (academic literature, OEM disclosures)</li>
+      <li>Publicly known ammunition specifications (round weights, penetrator dimensions, alloy compositions)</li>
+      <li>USGS consumption data and industry breakdowns by end-use sector</li>
+      <li>Industry publications (International Tungsten Industry Association, Nickel Institute)</li>
+    </ul>
+    <p style="margin-top:8px;">Actual DoD material demand by type and amount is a <strong>classified or closely-held figure</strong> that DARPA's OPEN program <sup class="cite"><a href="#src6">[6]</a></sup> and DLA's RAMF-SM modeling attempt to quantify internally. As GAO has noted, "DOD doesn't have the information necessary to estimate all of its critical material needs." <sup class="cite"><a href="#src16">[16]</a></sup></p>
+    
+    <h3 style="margin-top:14px;">Recommended Approach for a Complete Analysis</h3>
+    <ul>
+      <li><strong>Layer 1:</strong> DoD Comptroller P-1 line items → unit quantities by weapon system by FY</li>
+      <li><strong>Layer 2:</strong> Material intensity coefficients → kg of each material per unit (from BOMs, literature, engineering estimates)</li>
+      <li><strong>Layer 3:</strong> USGS MCS + trade data → domestic production, imports, exports, consumption by sector</li>
+      <li><strong>Layer 4:</strong> NDS shortfall data + DLA RAMF-SM → emergency scenario demand vs. available supply</li>
+      <li><strong>Layer 5:</strong> Gap = DoD demand − (domestic + allied supply − commercial competing demand − emergency attrition)</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 6: KEY SOURCES -->
+<!-- ============================================================ -->
+<div class="section">
+  <div class="section-title">6. Key Sources</div>
+  <div class="card" style="font-size:12px;">
+    <ol class="source-list">
+      <li id="src1"><a href="https://pubs.usgs.gov/periodicals/mcs2026/" target="_blank">USGS Mineral Commodity Summaries 2026</a> (February 2026): Nickel pp. 132–133, Tungsten pp. 200–201</li>
+      <li id="src2"><a href="https://www.gao.gov/products/gao-24-107176" target="_blank">GAO-24-107176</a>, "Critical Materials: Action Needed to Implement Requirements That Reduce Supply Chain Risks" (2024)</li>
+      <li id="src3"><a href="https://www.gao.gov/products/gao-24-106959" target="_blank">GAO-24-106959</a>, "National Defense Stockpile: Actions Needed to Improve DOD's Efforts to Prepare for Emergencies" (2024)</li>
+      <li id="src4"><a href="https://crsreports.congress.gov/product/pdf/R/R47833" target="_blank">CRS Report R47833</a>, "Emergency Access to Strategic and Critical Materials: The National Defense Stockpile"</li>
+      <li id="src5"><a href="https://www.congress.gov/crs-product/IF11226" target="_blank">CRS In Focus IF11226</a>, "Defense Primer: Acquiring Specialty Metals and Sensitive Materials"</li>
+      <li id="src6"><a href="https://www.darpa.mil/news/2023/transparency-critical-materials-forecast" target="_blank">DARPA OPEN Program Solicitation</a> (2023), "Increasing Transparency in Critical Materials Price, Supply, and Demand Forecasts"</li>
+      <li id="src7"><a href="https://www.fastmarkets.com/insights/us-tungsten-supply-chain-defense-growth/" target="_blank">Fastmarkets</a>, "US tungsten supply chain shifts amid $1B defense push" (October 2025)</li>
+      <li id="src8"><a href="https://www.congress.gov/crs-product/R47982" target="_blank">CRS Report R47982</a>, "Critical Mineral Resources: National Policy and Critical Minerals List"</li>
+      <li id="src9"><a href="https://www.dau.edu/acquipedia-article/bills-material-bom-dmsms" target="_blank">DAU Acquipedia</a>, "Bills of Material (BOM): Using BOMs for DMSMS"</li>
+      <li id="src10"><a href="https://www.mdpi.com/2079-9276/9/9/106" target="_blank">MDPI Resources (2020)</a>, "Supply Risk Considerations for the Elements in Nickel-Based Superalloys"</li>
+      <li id="src11"><a href="https://www.rtx.com/en/prattwhitney/services/other-services/hmi-metal-powders" target="_blank">RTX/Pratt &amp; Whitney HMI Metal Powders</a> division public information</li>
+      <li id="src12"><a href="https://www.kennametal.com/us/en/industries/defense.html" target="_blank">Kennametal Defense Solutions</a> and <a href="https://www.kennametal.com/us/en/products/Metal-Powders-Materials-Consumables/tungsten-powders.html" target="_blank">Tungsten Powders</a> product documentation</li>
+      <li id="src13"><a href="https://www.globaltungsten.com/about-us/" target="_blank">Global Tungsten &amp; Powders</a> (Plansee Group) corporate disclosures</li>
+      <li id="src14"><a href="https://www.elmettechnologies.com/key-segments/tungsten-molybdenum-defense/tungsten-kinetic-energy-penetrators/" target="_blank">Elmet Technologies</a>: Tungsten Kinetic Energy Penetrators product information</li>
+      <li id="src15"><a href="https://6kadditive.com/" target="_blank">6K Additive</a>: DPA Title III award and product portfolio disclosures</li>
+      <li id="src16"><a href="https://www.gao.gov/blog/critical-materials-are-high-demand.-what-dod-doing-secure-supply-chain-and-stockpile-these-resources" target="_blank">GAO WatchBlog</a>, "Critical Materials Are In High Demand": DoD supply chain and stockpile overview</li>
+      <li id="src17"><a href="https://www.insidegovernmentcontracts.com/2026/02/federal-push-for-critical-minerals-stockpiling-2025-in-review-and-outlook-for-2026/" target="_blank">Inside Government Contracts</a>, "Federal Push for Critical Minerals Stockpiling: 2025 in Review" (February 2026)</li>
+    </ol>
+  </div>
+</div>
+
+</div><!-- end container -->
+</body>
+</html>
